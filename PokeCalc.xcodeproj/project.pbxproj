@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		24E040BF2E96B58300742D63 /* PokeCalcShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 24E040B52E96B58200742D63 /* PokeCalcShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		24E040CD2E96B59E00742D63 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E040CC2E96B59E00742D63 /* WidgetKit.framework */; };
+		24E040CF2E96B59E00742D63 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24E040CE2E96B59E00742D63 /* SwiftUI.framework */; };
+		24E040E02E96B59F00742D63 /* PokeCalcWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 24E040CA2E96B59E00742D63 /* PokeCalcWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		24E040942E96B4A000742D63 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,13 +28,64 @@
 			remoteGlobalIDString = 24E040822E96B49F00742D63;
 			remoteInfo = PokeCalc;
 		};
+		24E040BD2E96B58300742D63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24E0407B2E96B49F00742D63 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24E040B42E96B58200742D63;
+			remoteInfo = PokeCalcShare;
+		};
+		24E040DE2E96B59F00742D63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24E0407B2E96B49F00742D63 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24E040C92E96B59E00742D63;
+			remoteInfo = PokeCalcWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		24E040C42E96B58300742D63 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				24E040E02E96B59F00742D63 /* PokeCalcWidgetExtension.appex in Embed Foundation Extensions */,
+				24E040BF2E96B58300742D63 /* PokeCalcShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		24E040832E96B49F00742D63 /* PokeCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E040932E96B4A000742D63 /* PokeCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokeCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E0409D2E96B4A000742D63 /* PokeCalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokeCalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		24E040B52E96B58200742D63 /* PokeCalcShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PokeCalcShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		24E040CA2E96B59E00742D63 /* PokeCalcWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PokeCalcWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		24E040CC2E96B59E00742D63 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		24E040CE2E96B59E00742D63 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		24E040E52E96B5A400742D63 /* PokeCalcWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PokeCalcWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		24E040C02E96B58300742D63 /* Exceptions for "PokeCalcShare" folder in "PokeCalcShare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 24E040B42E96B58200742D63 /* PokeCalcShare */;
+		};
+		24E040E12E96B59F00742D63 /* Exceptions for "PokeCalcWidget" folder in "PokeCalcWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 24E040C92E96B59E00742D63 /* PokeCalcWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		24E040852E96B49F00742D63 /* PokeCalc */ = {
@@ -43,6 +101,22 @@
 		24E040A02E96B4A000742D63 /* PokeCalcUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PokeCalcUITests;
+			sourceTree = "<group>";
+		};
+		24E040B62E96B58200742D63 /* PokeCalcShare */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				24E040C02E96B58300742D63 /* Exceptions for "PokeCalcShare" folder in "PokeCalcShare" target */,
+			);
+			path = PokeCalcShare;
+			sourceTree = "<group>";
+		};
+		24E040D02E96B59E00742D63 /* PokeCalcWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				24E040E12E96B59F00742D63 /* Exceptions for "PokeCalcWidget" folder in "PokeCalcWidgetExtension" target */,
+			);
+			path = PokeCalcWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,15 +143,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		24E040B22E96B58200742D63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24E040C72E96B59E00742D63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24E040CF2E96B59E00742D63 /* SwiftUI.framework in Frameworks */,
+				24E040CD2E96B59E00742D63 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		24E0407A2E96B49F00742D63 = {
 			isa = PBXGroup;
 			children = (
+				24E040E52E96B5A400742D63 /* PokeCalcWidgetExtension.entitlements */,
 				24E040852E96B49F00742D63 /* PokeCalc */,
 				24E040962E96B4A000742D63 /* PokeCalcTests */,
 				24E040A02E96B4A000742D63 /* PokeCalcUITests */,
+				24E040B62E96B58200742D63 /* PokeCalcShare */,
+				24E040D02E96B59E00742D63 /* PokeCalcWidget */,
+				24E040CB2E96B59E00742D63 /* Frameworks */,
 				24E040842E96B49F00742D63 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,8 +182,19 @@
 				24E040832E96B49F00742D63 /* PokeCalc.app */,
 				24E040932E96B4A000742D63 /* PokeCalcTests.xctest */,
 				24E0409D2E96B4A000742D63 /* PokeCalcUITests.xctest */,
+				24E040B52E96B58200742D63 /* PokeCalcShare.appex */,
+				24E040CA2E96B59E00742D63 /* PokeCalcWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		24E040CB2E96B59E00742D63 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24E040CC2E96B59E00742D63 /* WidgetKit.framework */,
+				24E040CE2E96B59E00742D63 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,10 +207,13 @@
 				24E0407F2E96B49F00742D63 /* Sources */,
 				24E040802E96B49F00742D63 /* Frameworks */,
 				24E040812E96B49F00742D63 /* Resources */,
+				24E040C42E96B58300742D63 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				24E040BE2E96B58300742D63 /* PBXTargetDependency */,
+				24E040DF2E96B59F00742D63 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				24E040852E96B49F00742D63 /* PokeCalc */,
@@ -163,6 +271,50 @@
 			productReference = 24E0409D2E96B4A000742D63 /* PokeCalcUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		24E040B42E96B58200742D63 /* PokeCalcShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24E040C12E96B58300742D63 /* Build configuration list for PBXNativeTarget "PokeCalcShare" */;
+			buildPhases = (
+				24E040B12E96B58200742D63 /* Sources */,
+				24E040B22E96B58200742D63 /* Frameworks */,
+				24E040B32E96B58200742D63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				24E040B62E96B58200742D63 /* PokeCalcShare */,
+			);
+			name = PokeCalcShare;
+			packageProductDependencies = (
+			);
+			productName = PokeCalcShare;
+			productReference = 24E040B52E96B58200742D63 /* PokeCalcShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		24E040C92E96B59E00742D63 /* PokeCalcWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24E040E22E96B59F00742D63 /* Build configuration list for PBXNativeTarget "PokeCalcWidgetExtension" */;
+			buildPhases = (
+				24E040C62E96B59E00742D63 /* Sources */,
+				24E040C72E96B59E00742D63 /* Frameworks */,
+				24E040C82E96B59E00742D63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				24E040D02E96B59E00742D63 /* PokeCalcWidget */,
+			);
+			name = PokeCalcWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = PokeCalcWidgetExtension;
+			productReference = 24E040CA2E96B59E00742D63 /* PokeCalcWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +336,12 @@
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = 24E040822E96B49F00742D63;
 					};
+					24E040B42E96B58200742D63 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					24E040C92E96B59E00742D63 = {
+						CreatedOnToolsVersion = 16.1;
+					};
 				};
 			};
 			buildConfigurationList = 24E0407E2E96B49F00742D63 /* Build configuration list for PBXProject "PokeCalc" */;
@@ -203,6 +361,8 @@
 				24E040822E96B49F00742D63 /* PokeCalc */,
 				24E040922E96B4A000742D63 /* PokeCalcTests */,
 				24E0409C2E96B4A000742D63 /* PokeCalcUITests */,
+				24E040B42E96B58200742D63 /* PokeCalcShare */,
+				24E040C92E96B59E00742D63 /* PokeCalcWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +383,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		24E0409B2E96B4A000742D63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24E040B32E96B58200742D63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24E040C82E96B59E00742D63 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +427,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		24E040B12E96B58200742D63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24E040C62E96B59E00742D63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +453,16 @@
 			isa = PBXTargetDependency;
 			target = 24E040822E96B49F00742D63 /* PokeCalc */;
 			targetProxy = 24E0409E2E96B4A000742D63 /* PBXContainerItemProxy */;
+		};
+		24E040BE2E96B58300742D63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24E040B42E96B58200742D63 /* PokeCalcShare */;
+			targetProxy = 24E040BD2E96B58300742D63 /* PBXContainerItemProxy */;
+		};
+		24E040DF2E96B59F00742D63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24E040C92E96B59E00742D63 /* PokeCalcWidgetExtension */;
+			targetProxy = 24E040DE2E96B59F00742D63 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -393,9 +591,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PokeCalc/PokeCalc.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PokeCalc/Preview Content\"";
+				DEVELOPMENT_TEAM = 3465YZ92H9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -408,7 +608,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc.PokeCalc;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -421,9 +621,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PokeCalc/PokeCalc.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PokeCalc/Preview Content\"";
+				DEVELOPMENT_TEAM = 3465YZ92H9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -436,7 +638,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc.PokeCalc;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -512,6 +714,114 @@
 			};
 			name = Release;
 		};
+		24E040C22E96B58300742D63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PokeCalcShare/PokeCalcShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3465YZ92H9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PokeCalcShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PokeCalcShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc.PokeCalcShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24E040C32E96B58300742D63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PokeCalcShare/PokeCalcShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3465YZ92H9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PokeCalcShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PokeCalcShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc.PokeCalcShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		24E040E32E96B59F00742D63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PokeCalcWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3465YZ92H9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PokeCalcWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PokeCalcWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc.PokeCalcWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24E040E42E96B59F00742D63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PokeCalcWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3465YZ92H9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PokeCalcWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PokeCalcWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = PokeCalc2.PokeCalc.PokeCalcWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -547,6 +857,24 @@
 			buildConfigurations = (
 				24E040AE2E96B4A000742D63 /* Debug */,
 				24E040AF2E96B4A000742D63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24E040C12E96B58300742D63 /* Build configuration list for PBXNativeTarget "PokeCalcShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24E040C22E96B58300742D63 /* Debug */,
+				24E040C32E96B58300742D63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24E040E22E96B59F00742D63 /* Build configuration list for PBXNativeTarget "PokeCalcWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24E040E32E96B59F00742D63 /* Debug */,
+				24E040E42E96B59F00742D63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
