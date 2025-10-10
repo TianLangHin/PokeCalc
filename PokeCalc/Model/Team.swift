@@ -5,7 +5,7 @@
 //  Created by Tian Lang Hin on 10/10/2025.
 //
 
-struct Team: Hashable, IDGeneratable {
+struct Team: Hashable, IDGeneratable, Identifiable {
     let id: Int
     let name: String
     let isFavourite: Bool

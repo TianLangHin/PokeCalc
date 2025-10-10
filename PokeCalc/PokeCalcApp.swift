@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct PokeCalcApp: App {
+    @State var database = DatabaseViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(database)
         }
     }
 }
