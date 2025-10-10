@@ -12,18 +12,24 @@ struct TeamsView: View {
     @EnvironmentObject var database: DatabaseViewModel
     
     var body: some View {
-        List {
-            ForEach(database.teams, id: \.id) { team in
-                HStack {
-                    Text(team.name)
-                    Spacer()
-                    Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+        NavigationStack {
+            List {
+                ForEach(database.teams, id: \.id) { team in
+                    HStack {
+                        NavigationLink {
+                            TeamDetailView(team: team)
+                        } label: {
+                            Text(team.name)
+                        }
+                        Spacer()
+                        Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                    }
                 }
             }
-        }
-        .onAppear {
-            Task {
-                database.refresh()
+            .onAppear {
+                Task {
+                    database.refresh()
+                }
             }
         }
         
@@ -34,7 +40,6 @@ struct TeamsView: View {
 
 
 #Preview {
-    
     TeamsView()
         .environmentObject(DatabaseViewModel())
 }

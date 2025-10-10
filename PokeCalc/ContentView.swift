@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var database = DatabaseViewModel()
+    @EnvironmentObject var database: DatabaseViewModel
 
     @State var alertPokemon = false
     @State var alertTeam = false
@@ -17,56 +17,67 @@ struct ContentView: View {
     @State var c = 1
 
     var body: some View {
-        VStack {
-            Text("Successful Initialisation: \(database.dbController.success)")
-            HStack {
-                Text("Pokemon")
+        NavigationStack {
+            VStack {
+                Text("Successful Initialisation: \(database.dbController.success)")
+                HStack {
+                    Text("Pokemon")
+                    Button {
+                        showingSheet = true
+                    } label: {
+                        Text("Add")
+                    }
+                }
+                List {
+                    ForEach(database.pokemon, id: \.self) { pokemon in
+                        Text("\(pokemon)")
+                    }
+                }
+                HStack {
+                    Text("Teams")
+                    Button {
+                        let team = Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [c, c+1, c+2])
+                        c += 1
+                        alertTeam = !database.addTeam(team)
+                    } label: {
+                        Text("Add Team")
+                    }
+                }
+                List {
+                    ForEach(database.teams, id: \.self) { team in
+                        Text("\(team)")
+                    }
+                }
                 Button {
-                    showingSheet = true
+                    let _ = database.clear()
                 } label: {
-                    Text("Add")
+                    Text("Clear")
                 }
-            }
-            List {
-                ForEach(database.pokemon, id: \.self) { pokemon in
-                    Text("\(pokemon)")
-                }
-            }
-            HStack {
-                Text("Teams")
-                Button {
-                    let team = Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [c, c+1, c+2])
-                    c += 1
-                    alertTeam = !database.addTeam(team)
+                
+                // This is a testing button for the team list view:
+                NavigationLink {
+                    TeamsView()
+                        .environmentObject(database)
                 } label: {
-                    Text("Add Team")
+                    Text("Test Team List View")
                 }
             }
-            List {
-                ForEach(database.teams, id: \.self) { team in
-                    Text("\(team)")
-                }
+            .padding()
+            .alert("Pokemon Fail", isPresented: $alertPokemon) {
+                Button("Dismiss", role: .cancel) {}
             }
-            Button {
-                let _ = database.clear()
-            } label: {
-                Text("Clear")
+            .alert("Team Fail", isPresented: $alertTeam) {
+                Button("Dismiss", role: .cancel) {}
             }
-        }
-        .padding()
-        .alert("Pokemon Fail", isPresented: $alertPokemon) {
-            Button("Dismiss", role: .cancel) {}
-        }
-        .alert("Team Fail", isPresented: $alertTeam) {
-            Button("Dismiss", role: .cancel) {}
-        }
-        .sheet(isPresented: $showingSheet) {
-            PokemonLookupView()
-                .environmentObject(database)
+            .sheet(isPresented: $showingSheet) {
+                PokemonLookupView()
+                    .environmentObject(database)
+            }
         }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(DatabaseViewModel())
 }
