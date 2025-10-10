@@ -18,7 +18,18 @@ struct PokemonBriefView: View {
     var body: some View {
         HStack {
             let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemonNumber).png"
-            AsyncImage(url: URL(string: url))
+            AsyncImage(url: URL(string: url)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                case .failure:
+                    EmptyView()
+                @unknown default:
+                    EmptyView()
+                }
+            }
             Text(pokemonName)
         }
         .onTapGesture {
