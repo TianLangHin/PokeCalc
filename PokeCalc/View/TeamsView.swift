@@ -10,11 +10,21 @@ import Foundation
 
 struct TeamsView: View {
     @EnvironmentObject var database: DatabaseViewModel
+    @State var searchQuery: String = ""
+    @State var deleteSuccess: Bool = false
+    
+    var filteredTeam: [Team] {
+        if searchQuery.isEmpty {
+            return database.teams
+        }
+        return database.filter(searchText: searchQuery)
+    }
+    
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(database.teams, id: \.id) { team in
+                ForEach(filteredTeam, id: \.id) { team in
                     HStack {
                         NavigationLink {
                             TeamDetailView(team: team)
@@ -25,17 +35,28 @@ struct TeamsView: View {
                         Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
                     }
                 }
-            }
-            .onAppear {
-                Task {
-                    database.refresh()
+                .onDelete(perform: deleteTeam)
+                .onAppear {
+                    Task {
+                        database.refresh()
+                    }
                 }
             }
+            .searchable(text: $searchQuery, prompt: "Search for Team")
         }
         
          
 
     }
+    
+    
+    func deleteTeam(at offsets: IndexSet) {
+        let teamsToDelete = offsets.map { filteredTeam[$0] }
+        for team in teamsToDelete {
+            deleteSuccess = database.deleteTeam(by: team.id)
+        }
+    }
+
 }
 
 

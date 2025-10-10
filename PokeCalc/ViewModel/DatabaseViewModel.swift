@@ -68,4 +68,16 @@ class DatabaseViewModel: ObservableObject {
         let teamId = self.teams.map { $0.id }.max() ?? 0
         Team.resetIdCounter(to: teamId + 1)
     }
+    
+    
+    
+    func filter(searchText: String) -> [Team] {
+        var filteredTeam: [Team] = []
+        for team in self.teams {
+            if (team.name.lowercased().contains(searchText.lowercased())) == true {
+                filteredTeam.append(team)
+            }
+        }
+        return filteredTeam
+    }
 }

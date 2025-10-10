@@ -15,6 +15,7 @@ struct ContentView: View {
     @State var showingSheet = false
 
     @State var c = 1
+    @State var nameNumber = 1
 
     var body: some View {
         NavigationStack {
@@ -36,8 +37,9 @@ struct ContentView: View {
                 HStack {
                     Text("Teams")
                     Button {
-                        let team = Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [c, c+1, c+2])
+                        let team = Team(id: Team.getUniqueId(), name: "Team \(nameNumber)", isFavourite: false, pokemonIDs: [c, c+1, c+2])
                         c += 1
+                        nameNumber += 1
                         alertTeam = !database.addTeam(team)
                     } label: {
                         Text("Add Team")
