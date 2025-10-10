@@ -61,7 +61,7 @@ struct ContentView: View {
             Button("Dismiss", role: .cancel) {}
         }
         .sheet(isPresented: $showingSheet) {
-            AddPokemonView()
+            PokemonLookupView()
                 .environmentObject(database)
         }
     }

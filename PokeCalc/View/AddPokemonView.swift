@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct AddPokemonView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: DatabaseViewModel
 
-    @State var pokemonNumber = 0
+    @State var pokemonNumber: Int
+    @State var pokemonName: String
     @State var item = ""
     @State var level = 1
     @State var ability = ""
@@ -21,9 +23,7 @@ struct AddPokemonView: View {
 
     var body: some View {
         VStack {
-            TextField("Pokemon API Number", value: $pokemonNumber, format: .number)
-                .textFieldStyle(.roundedBorder)
-                .padding()
+            Text("\(pokemonNumber): \(pokemonName)")
             TextField("Item", text: $item)
                 .textFieldStyle(.roundedBorder)
                 .padding()
@@ -51,6 +51,7 @@ struct AddPokemonView: View {
                     nature: nature,
                     moves: Array(moves.split(separator: ",").map { String($0) }))
                 alert = !database.addPokemon(pokemon)
+                dismiss()
             } label: {
                 Text("Add Pokémon")
             }
