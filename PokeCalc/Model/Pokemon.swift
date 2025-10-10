@@ -8,11 +8,12 @@
 struct Pokemon: Hashable, IDGeneratable {
     let id: Int
     let pokemonNumber: Int
-    let item: String
-    let level: Int
-    let effortValues: PokemonStats
-    let nature: String
-    let moves: [String]
+    var item: String
+    var level: Int
+    var ability: String
+    var effortValues: PokemonStats
+    var nature: String
+    var moves: [String]
 
     func getMove(at index: Int) -> String {
         return self.moves.count > index ? self.moves[index] : ""
