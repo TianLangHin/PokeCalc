@@ -29,6 +29,30 @@ class DatabaseViewModel: ObservableObject {
         return success
     }
 
+    func updatePokemon(_ pokemon: Pokemon) -> Bool {
+        let success = self.dbController.updatePokemon(pokemon)
+        self.refresh()
+        return success
+    }
+
+    func updateTeam(_ team: Team) -> Bool {
+        let success = self.dbController.updateTeam(team)
+        self.refresh()
+        return success
+    }
+
+    func deletePokemon(by id: Int) -> Bool {
+        let success = self.dbController.deletePokemon(by: id)
+        self.refresh()
+        return success
+    }
+
+    func deleteTeam(by id: Int) -> Bool {
+        let success = self.dbController.deleteTeam(by: id)
+        self.refresh()
+        return success
+    }
+
     func clear() -> Bool {
         let success1 = self.dbController.deleteAllPokemon()
         let success2 = self.dbController.deleteAllTeams()

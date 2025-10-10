@@ -237,6 +237,103 @@ class DatabaseController {
         return true
     }
 
+    func updatePokemon(_ pokemon: Pokemon) -> Bool {
+        let updateString = """
+        UPDATE \(pokemonTable)
+        SET
+            PokemonNumber = ?,
+            Item = ?,
+            Level = ?,
+            Ability = ?,
+            EV_HP = ?, EV_Atk = ?, EV_Def = ?, EV_SpA = ?, EV_SpD = ?, EV_Spe = ?,
+            Nature = ?,
+            Move1 = ?, Move2 = ?, Move3 = ?, Move4 = ?
+        WHERE PokemonID = ?;
+        """
+        var stmt: OpaquePointer? = nil
+        guard sqlite3_prepare_v2(db, updateString, -1, &stmt, nil) == SQLITE_OK else {
+            return false
+        }
+        sqlite3_bind_int64(stmt, 1, Int64(pokemon.pokemonNumber))
+        sqlite3_bind_text(stmt, 2, pokemon.item, -1, SQLITE_TRANZIENT)
+        sqlite3_bind_int64(stmt, 3, Int64(pokemon.level))
+        sqlite3_bind_text(stmt, 4, pokemon.ability, -1, SQLITE_TRANZIENT)
+        sqlite3_bind_int64(stmt, 5, Int64(pokemon.effortValues.hp))
+        sqlite3_bind_int64(stmt, 6, Int64(pokemon.effortValues.attack))
+        sqlite3_bind_int64(stmt, 7, Int64(pokemon.effortValues.defense))
+        sqlite3_bind_int64(stmt, 8, Int64(pokemon.effortValues.specialAttack))
+        sqlite3_bind_int64(stmt, 9, Int64(pokemon.effortValues.specialDefense))
+        sqlite3_bind_int64(stmt, 10, Int64(pokemon.effortValues.speed))
+        sqlite3_bind_text(stmt, 11, pokemon.nature, -1, SQLITE_TRANZIENT)
+        for moveNumber in 1...4 {
+            sqlite3_bind_text(stmt, Int32(11 + moveNumber), pokemon.getMove(at: moveNumber - 1), -1, SQLITE_TRANZIENT)
+        }
+        sqlite3_bind_int64(stmt, 16, Int64(pokemon.id))
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            return false
+        }
+        sqlite3_finalize(stmt)
+        return true
+    }
+
+    func updateTeam(_ team: Team) -> Bool {
+        let updateString = """
+        UPDATE \(teamsTable)
+        SET
+            TeamName = ?, IsFavourite = ?,
+            Pokemon1 = ?, Pokemon2 = ?, Pokemon3 = ?,
+            Pokemon4 = ?, Pokemon5 = ?, Pokemon6 = ?
+        WHERE TeamID = ?;
+        """
+        var stmt: OpaquePointer? = nil
+        guard sqlite3_prepare_v2(db, updateString, -1, &stmt, nil) == SQLITE_OK else {
+            return false
+        }
+        sqlite3_bind_text(stmt, 1, team.name, -1, SQLITE_TRANZIENT)
+        sqlite3_bind_int(stmt, 2, team.isFavourite ? 1 : 0)
+        for pokemonNumber in 1...6 {
+            if let pokemonID = team.getPokemonID(at: pokemonNumber - 1) {
+                sqlite3_bind_int64(stmt, Int32(2 + pokemonNumber), Int64(pokemonID))
+            } else {
+                sqlite3_bind_null(stmt, Int32(2 + pokemonNumber))
+            }
+        }
+        sqlite3_bind_int64(stmt, 9, Int64(team.id))
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            return false
+        }
+        sqlite3_finalize(stmt)
+        return true
+    }
+
+    func deletePokemon(by id: Int) -> Bool {
+        let deleteString = "DELETE FROM \(pokemonTable) WHERE PokemonID = ?;"
+        var stmt: OpaquePointer? = nil
+        guard sqlite3_prepare_v2(db, deleteString, -1, &stmt, nil) == SQLITE_OK else {
+            return false
+        }
+        sqlite3_bind_int64(stmt, 1, Int64(id))
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            return false
+        }
+        sqlite3_finalize(stmt)
+        return true
+    }
+
+    func deleteTeam(by id: Int) -> Bool {
+        let deleteString = "DELETE FROM \(teamsTable) WHERE TeamID = ?;"
+        var stmt: OpaquePointer? = nil
+        guard sqlite3_prepare_v2(db, deleteString, -1, &stmt, nil) == SQLITE_OK else {
+            return false
+        }
+        sqlite3_bind_int64(stmt, 1, Int64(id))
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            return false
+        }
+        sqlite3_finalize(stmt)
+        return true
+    }
+
     func deleteAllPokemon() -> Bool {
         let deleteString = "DELETE FROM \(pokemonTable)"
         var stmt: OpaquePointer? = nil

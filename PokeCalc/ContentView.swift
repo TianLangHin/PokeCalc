@@ -48,6 +48,20 @@ struct ContentView: View {
                         Text("\(team)")
                     }
                 }
+                // Testing section for update/delete
+                Button {
+                    alertTeam = !database.updateTeam(Team(id: 1, name: "New!!", isFavourite: true, pokemonIDs: [1, 2]))
+                    alertPokemon = !database.updatePokemon(Pokemon(id: 1, pokemonNumber: 999, item: "N/A", level: 99, ability: "Sheer Force", effortValues: PokemonStats(hp: 1, attack: 1, defense: 1, specialAttack: 1, specialDefense: 1, speed: 1), nature: "Hardy", moves: ["Perish Song"]))
+                } label: {
+                    Text("Update 1")
+                }
+                Button {
+                    alertTeam = !database.deleteTeam(by: 1)
+                    alertPokemon = !database.deletePokemon(by: 1)
+                } label: {
+                    Text("Delete 1")
+                }
+                // Testing end
                 Button {
                     let _ = database.clear()
                 } label: {
