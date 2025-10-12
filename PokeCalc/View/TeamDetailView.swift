@@ -12,10 +12,22 @@ struct TeamDetailView: View {
     @State var team: Team
     
     var body: some View {
+        Text(team.name)
+            .font(.largeTitle)
+            .bold()
+        
         List {
             ForEach(team.pokemonIDs, id:\.self) { id in
                 Text("Pokemon Number: \(id)")
             }
+        }
+        
+        Button(action: {
+            
+        }) {
+            Text("Add Pokemon To Team")
+                .padding()
+                .font(.headline)
         }
     }
 }

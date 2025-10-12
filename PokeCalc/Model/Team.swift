@@ -8,11 +8,15 @@
 struct Team: Hashable, IDGeneratable, Identifiable {
     let id: Int
     let name: String
-    let isFavourite: Bool
+    var isFavourite: Bool
     let pokemonIDs: [Int]
 
     func getPokemonID(at index: Int) -> Int? {
         return self.pokemonIDs.count > index ? self.pokemonIDs[index] : nil
+    }
+    
+    mutating func toggleFavourite() {
+        self.isFavourite.toggle()
     }
 
     static let maxPokemon = 6
