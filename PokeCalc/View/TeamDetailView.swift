@@ -35,13 +35,30 @@ struct TeamDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    toggleFavourite()
+                }) {
+                    Image(systemName: team?.isFavourite ?? false ? "heart.fill" : "heart")
+                        .foregroundColor(team?.isFavourite ?? false ? .red : .gray)
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     PokemonLookupView(team: team)
                 } label: {
                     Image(systemName: "plus")
                 }
                 .disabled(team?.pokemonIDs.count ?? 0 >= Team.maxPokemon)
+                .foregroundColor(team?.pokemonIDs.count ?? 0 >= Team.maxPokemon ? .gray : .accentColor)
             }
+        }
+    }
+    
+    func toggleFavourite() {
+        if let index = database.teams.firstIndex(where: {$0.id == id}) {
+            database.teams[index].toggleFavourite()
+            database.updateTeam(database.teams[index])
         }
     }
 }
