@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddTeamView: View {
     @EnvironmentObject var database: DatabaseViewModel
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) private var dismiss
     @State var teamName: String = ""
     @State var createError: Bool = false
     
@@ -28,7 +28,7 @@ struct AddTeamView: View {
             
             HStack(spacing: 10) {
                 Button(action: {
-                    isPresented = false
+                    dismiss()
                 }) {
                     Text("Cancel")
                 }
@@ -42,7 +42,7 @@ struct AddTeamView: View {
                 Button(action: {
                     addTeam()
                     if !createError {
-                        isPresented = false
+                        dismiss()
                     }
                 }) {
                     Text("Submit")
