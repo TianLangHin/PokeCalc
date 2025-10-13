@@ -9,33 +9,40 @@ import SwiftUI
 import Foundation
 
 struct TeamDetailView: View {
-    @State var team: Team
+    @State var id: Int
+    @EnvironmentObject var database: DatabaseViewModel
     
     var body: some View {
         NavigationStack {
-            Text(team.name)
+            Text(database.teams[id].name)
                 .font(.largeTitle)
                 .bold()
             
             List {
-                ForEach(team.pokemonIDs, id:\.self) { id in
+                ForEach(database.teams[id].pokemonIDs, id:\.self) { id in
                     Text("Pokemon Number: \(id)")
+                }
+            }
+            .onAppear {
+                Task {
+                    database.refresh()
                 }
             }
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
-                    PokemonLookupView(team: team)
+                    PokemonLookupView(team: database.teams[id])
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(team.pokemonIDs.count >= Team.maxPokemon)
+                .disabled(database.teams[id].pokemonIDs.count >= Team.maxPokemon)
             }
         }
     }
 }
 
-#Preview {
-    TeamDetailView(team: Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [1000, 100+1, 100+2]))
-}
+//#Preview {
+//    TeamDetailView(team: Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [1000, 100+1, 100+2]))
+//        .environmentObject(DatabaseViewModel())
+//}

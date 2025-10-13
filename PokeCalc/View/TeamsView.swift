@@ -30,7 +30,7 @@ struct TeamsView: View {
                 ForEach(filteredTeam, id: \.id) { team in
                     HStack {
                         NavigationLink {
-                            TeamDetailView(team: team)
+                            TeamDetailView(id: team.id)
                         } label: {
                             Text(team.name)
                         }
@@ -48,6 +48,7 @@ struct TeamsView: View {
             .searchable(text: $searchQuery, prompt: "Search for Team")
             .popover(isPresented: $showPopup) {
                 AddTeamView()
+                    .environmentObject(database)
             }
         }
         .toolbar {
