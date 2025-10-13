@@ -12,14 +12,18 @@ struct TeamDetailView: View {
     @State var id: Int
     @EnvironmentObject var database: DatabaseViewModel
     
+    var team: Team? {
+        database.teams.first(where: { $0.id == id })
+    }
+
     var body: some View {
         NavigationStack {
-            Text(database.teams[id].name)
+            Text(team?.name ?? "Placeholder")
                 .font(.largeTitle)
                 .bold()
             
             List {
-                ForEach(database.teams[id].pokemonIDs, id:\.self) { id in
+                ForEach(team?.pokemonIDs ?? [], id:\.self) { id in
                     Text("Pokemon Number: \(id)")
                 }
             }
@@ -32,11 +36,11 @@ struct TeamDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
-                    PokemonLookupView(team: database.teams[id])
+                    PokemonLookupView(team: team)
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(database.teams[id].pokemonIDs.count >= Team.maxPokemon)
+                .disabled(team?.pokemonIDs.count ?? 0 >= Team.maxPokemon)
             }
         }
     }
