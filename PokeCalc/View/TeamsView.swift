@@ -29,13 +29,18 @@ struct TeamsView: View {
             List {
                 ForEach(filteredTeam, id: \.id) { team in
                     HStack {
+                        Button (action: {
+                            toggleFavourite(id: team.id)
+                        }) {
+                            Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        
                         NavigationLink {
                             TeamDetailView(id: team.id)
                         } label: {
                             Text(team.name)
                         }
-                        Spacer()
-                        Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
                     }
                 }
                 .onDelete(perform: deleteTeam)
@@ -69,6 +74,13 @@ struct TeamsView: View {
         let teamsToDelete = offsets.map { filteredTeam[$0] }
         for team in teamsToDelete {
             deleteSuccess = database.deleteTeam(by: team.id)
+        }
+    }
+    
+    func toggleFavourite(id: Int) {
+        if let index = database.teams.firstIndex(where: {$0.id == id}) {
+            database.teams[index].toggleFavourite()
+            database.updateTeam(database.teams[index])
         }
     }
 
