@@ -12,6 +12,7 @@ struct TeamsView: View {
     @EnvironmentObject var database: DatabaseViewModel
     @State var searchQuery: String = ""
     @State var newName: String = ""
+    @State var showPopup: Bool = false
     @State var showAlert: Bool = false
     @State var deleteSuccess: Bool = false
     
@@ -25,53 +26,48 @@ struct TeamsView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(filteredTeam, id: \.id) { team in
-                    HStack {
-                        NavigationLink {
-                            TeamDetailView(team: team)
-                        } label: {
-                            Text(team.name)
+            ZStack {
+                VStack {
+                    Button(action: {
+                        showPopup = true
+                    }) {
+                        Text("Add New Team")
+                            .font(.headline)
+                            .bold()
+                    }
+                    
+                    List {
+                        ForEach(filteredTeam, id: \.id) { team in
+                            HStack {
+                                NavigationLink {
+                                    TeamDetailView(team: team)
+                                } label: {
+                                    Text(team.name)
+                                }
+                                Spacer()
+                                Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                            }
                         }
-                        Spacer()
-                        Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                        .onDelete(perform: deleteTeam)
+                        .onAppear {
+                            Task {
+                                database.refresh()
+                            }
+                        }
                     }
+                    .searchable(text: $searchQuery, prompt: "Search for Team")
                 }
-                .onDelete(perform: deleteTeam)
-                .onAppear {
-                    Task {
-                        database.refresh()
-                    }
+                
+                if showPopup {
+                    Color.black.opacity(0.3)
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    AddTeamView(isPresented: $showPopup)
+                        .background((Color.white.cornerRadius(20)))
+                        .padding()
                 }
-            }
-            .searchable(text: $searchQuery, prompt: "Search for Team")
-            
-            Button(action: {
-                self.showAlert = true
-            }) {
-                Text("Add New Team")
-                    .padding()
-                    .font(.headline)
             }
         }
-        .alert("Enter New Team Name", isPresented: $showAlert) {
-            TextField("Enter New Team Name...", text: $newName)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-            Button("OK") {
-                if !newName.isEmpty {
-                    let team = Team(id: Team.getUniqueId(), name: newName, isFavourite: false, pokemonIDs: [1, 2, 3])
-                    database.addTeam(team) // Dunno what to do with success rn here
-                    newName = ""
-                }
-            }
-            Button("Cancel", role: .cancel) {
-                newName = ""
-            }
-        }
-        
-         
-
     }
     
     
