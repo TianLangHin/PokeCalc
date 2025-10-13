@@ -33,6 +33,7 @@ struct TeamsView: View {
                             toggleFavourite(id: team.id)
                         }) {
                             Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                                .foregroundStyle(.red)
                         }
                         .buttonStyle(BorderlessButtonStyle())
                         
