@@ -27,47 +27,48 @@ struct TeamsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack {
-                    Button(action: {
-                        showPopup = true
-                    }) {
-                        Text("Add New Team")
-                            .font(.headline)
-                            .bold()
-                    }
-                    
-                    List {
-                        ForEach(filteredTeam, id: \.id) { team in
-                            HStack {
-                                NavigationLink {
-                                    TeamDetailView(team: team)
-                                } label: {
-                                    Text(team.name)
-                                }
-                                Spacer()
-                                Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                List {
+                    ForEach(filteredTeam, id: \.id) { team in
+                        HStack {
+                            NavigationLink {
+                                TeamDetailView(team: team)
+                            } label: {
+                                Text(team.name)
                             }
-                        }
-                        .onDelete(perform: deleteTeam)
-                        .onAppear {
-                            Task {
-                                database.refresh()
-                            }
+                            Spacer()
+                            Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
                         }
                     }
-                    .searchable(text: $searchQuery, prompt: "Search for Team")
+                    .onDelete(perform: deleteTeam)
+                    .onAppear {
+                        Task {
+                            database.refresh()
+                        }
+                    }
                 }
+                .searchable(text: $searchQuery, prompt: "Search for Team")
+            }
+            
+            if showPopup {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
                 
-                if showPopup {
-                    Color.black.opacity(0.3)
-                        .edgesIgnoringSafeArea(.all)
-                    
-                    AddTeamView(isPresented: $showPopup)
-                        .background((Color.white.cornerRadius(20)))
-                        .padding()
-                }
+                AddTeamView(isPresented: $showPopup)
+                    .background((Color.white.cornerRadius(20)))
+                    .padding()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing){
+                Button(action: {
+                    showPopup = true
+                }) {
+                    Image(systemName: "plus")
+                }
+                
+            }
+        }
+                
     }
     
     
