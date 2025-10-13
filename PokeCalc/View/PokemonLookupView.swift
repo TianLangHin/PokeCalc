@@ -11,6 +11,7 @@ struct PokemonLookupView: View {
     @EnvironmentObject var database: DatabaseViewModel
 
     @State var namesLookup = PokemonNamesViewModel()
+    @State var team: Team?
     @State var isLoaded = false
 
     var body: some View {
@@ -22,7 +23,7 @@ struct PokemonLookupView: View {
                     .padding()
                 List {
                     ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
-                        PokemonBriefView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name)
+                        PokemonBriefView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
                             .environmentObject(database)
                     }
                 }

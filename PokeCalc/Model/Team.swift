@@ -9,10 +9,14 @@ struct Team: Hashable, IDGeneratable, Identifiable {
     let id: Int
     let name: String
     var isFavourite: Bool
-    let pokemonIDs: [Int]
+    var pokemonIDs: [Int]
 
     func getPokemonID(at index: Int) -> Int? {
         return self.pokemonIDs.count > index ? self.pokemonIDs[index] : nil
+    }
+    
+    mutating func addPokemon(id: Int) {
+        self.pokemonIDs.append(id)
     }
     
     mutating func toggleFavourite() {

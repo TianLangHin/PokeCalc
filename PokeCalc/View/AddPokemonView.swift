@@ -13,6 +13,8 @@ struct AddPokemonView: View {
 
     @State var pokemonNumber: Int
     @State var pokemonName: String
+    @State var team: Team?
+    
     @State var item = ""
     @State var level = 1
     @State var ability = ""
@@ -50,7 +52,13 @@ struct AddPokemonView: View {
                     effortValues: PokemonStats(hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0),
                     nature: nature,
                     moves: Array(moves.split(separator: ",").map { String($0) }))
-                alert = !database.addPokemon(pokemon)
+                
+                if var team = team {
+                    team.addPokemon(id: pokemon.pokemonNumber)
+                    alert = !database.updateTeam(team)
+                } else {
+                    alert = !database.addPokemon(pokemon)
+                }
                 dismiss()
             } label: {
                 Text("Add Pokémon")
