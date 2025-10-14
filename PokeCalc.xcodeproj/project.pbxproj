@@ -71,6 +71,68 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		24B71BDC2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/DatabaseController.swift,
+				Model/Pokemon.swift,
+				Model/PokemonNamesFetcher.swift,
+				Model/PokemonStats.swift,
+				Model/Protocols/APIFetchable.swift,
+				Model/Protocols/IDGeneratable.swift,
+				Model/Team.swift,
+				ViewModel/DatabaseViewModel.swift,
+				ViewModel/PokemonNamesViewModel.swift,
+				ViewModel/TeamReaderViewModel.swift,
+			);
+			target = 24E040922E96B4A000742D63 /* PokeCalcTests */;
+		};
+		24B71BDD2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/DatabaseController.swift,
+				Model/Pokemon.swift,
+				Model/PokemonNamesFetcher.swift,
+				Model/PokemonStats.swift,
+				Model/Protocols/APIFetchable.swift,
+				Model/Protocols/IDGeneratable.swift,
+				Model/Team.swift,
+				ViewModel/DatabaseViewModel.swift,
+				ViewModel/PokemonNamesViewModel.swift,
+				ViewModel/TeamReaderViewModel.swift,
+			);
+			target = 24E0409C2E96B4A000742D63 /* PokeCalcUITests */;
+		};
+		24B71BDE2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcShare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/DatabaseController.swift,
+				Model/Pokemon.swift,
+				Model/PokemonNamesFetcher.swift,
+				Model/PokemonStats.swift,
+				Model/Protocols/APIFetchable.swift,
+				Model/Protocols/IDGeneratable.swift,
+				Model/Team.swift,
+				ViewModel/DatabaseViewModel.swift,
+				ViewModel/PokemonNamesViewModel.swift,
+				ViewModel/TeamReaderViewModel.swift,
+			);
+			target = 24E040B42E96B58200742D63 /* PokeCalcShare */;
+		};
+		24B71BDF2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/DatabaseController.swift,
+				Model/Pokemon.swift,
+				Model/PokemonNamesFetcher.swift,
+				Model/PokemonStats.swift,
+				Model/Protocols/APIFetchable.swift,
+				Model/Protocols/IDGeneratable.swift,
+				Model/Team.swift,
+				ViewModel/DatabaseViewModel.swift,
+			);
+			target = 24E040C92E96B59E00742D63 /* PokeCalcWidgetExtension */;
+		};
 		24E040C02E96B58300742D63 /* Exceptions for "PokeCalcShare" folder in "PokeCalcShare" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -90,6 +152,12 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		24E040852E96B49F00742D63 /* PokeCalc */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				24B71BDC2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcTests" target */,
+				24B71BDD2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcUITests" target */,
+				24B71BDE2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcShare" target */,
+				24B71BDF2E9865D3005ED2AA /* Exceptions for "PokeCalc" folder in "PokeCalcWidgetExtension" target */,
+			);
 			path = PokeCalc;
 			sourceTree = "<group>";
 		};
