@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct ShareExtensionView: View {
     @State var text: String
@@ -83,6 +84,7 @@ struct ShareExtensionView: View {
             }
             .alert(alertText, isPresented: $isAlerting) {
                 Button("OK", role: .cancel) {
+                    WidgetCenter.shared.reloadAllTimelines()
                     self.close()
                 }
             }

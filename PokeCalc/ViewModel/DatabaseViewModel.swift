@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 class DatabaseViewModel: ObservableObject {
     let dbController = DatabaseController()
@@ -67,6 +68,7 @@ class DatabaseViewModel: ObservableObject {
         self.teams = self.dbController.selectAllTeams() ?? []
         let teamId = self.teams.map { $0.id }.max() ?? 0
         Team.resetIdCounter(to: teamId + 1)
+        WidgetCenter.shared.reloadAllTimelines()
     }
     
     
