@@ -9,7 +9,7 @@ import SwiftUI
 
 @Observable
 class TeamReaderViewModel {
-    let firstLineRegex = /^(.+?)(?:\s+[(](?![MF])([A-Za-z0-9:\- ]+)[)])?(?:\s+[(](M|F)[)])?(?:\s+@\s+(.+))?\s*$/
+    let firstLineRegex = /^(.+?)(?:\s+[(]((?![MF])[A-Za-z0-9:\- ]+|[MF][A-Za-z0-9:\- ]+)[)])?(?:\s+[(](M|F)[)])?(?:\s+@\s+(.+))?\s*$/
     let statComponentRegex = /\s*(\d+)\s(HP|Atk|Def|SpA|SpD|Spe)\s*/
     let ignoredHeaders = ["Tera Type:", "Shiny:", "Happiness:", "Hidden Power:", "Dynamax Level:"]
 
