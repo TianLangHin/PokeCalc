@@ -21,7 +21,8 @@ struct AddPokemonView: View {
     @State var nature = ""
     @State var moves = ""
 
-    @State var alert = false
+    @State var addToTeamAlert: Bool = false
+    @State var addPokemonAlert: Bool = false
 
     var body: some View {
         VStack {
@@ -54,17 +55,19 @@ struct AddPokemonView: View {
                     moves: Array(moves.split(separator: ",").map { String($0) }))
                 
                 if var team = team {
-                    team.addPokemon(id: pokemon.pokemonNumber)
-                    alert = !database.updateTeam(team)
-                } else {
-                    alert = !database.addPokemon(pokemon)
+                    team.addPokemon(id: pokemon.id)
+                    addToTeamAlert = !database.updateTeam(team)
                 }
+                addPokemonAlert = !database.addPokemon(pokemon)
                 dismiss()
             } label: {
                 Text("Add Pokémon")
             }
         }
-        .alert("Add Pokemon Failed", isPresented: $alert) {
+        .alert("Add Pokémon Failed", isPresented: $addPokemonAlert) {
+            Button("OK", role: .cancel) {}
+        }
+        .alert("Add Pokémon to Team Failed", isPresented: $addToTeamAlert) {
             Button("OK", role: .cancel) {}
         }
     }

@@ -58,7 +58,7 @@ struct AddTeamView: View {
         if teamName.isEmpty {
             teamName = "Team \(teamID)"
         }
-        let newTeam = Team(id: teamID, name: teamName, isFavourite: false, pokemonIDs: [1024])
+        let newTeam = Team(id: teamID, name: teamName, isFavourite: false, pokemonIDs: [])
         createError = !database.addTeam(newTeam)
     }
 }
