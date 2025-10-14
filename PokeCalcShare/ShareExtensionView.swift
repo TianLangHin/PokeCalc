@@ -9,6 +9,13 @@ import SwiftUI
 
 struct ShareExtensionView: View {
     @State var text: String
+    @State var teamText = "Untitled"
+    @State var teamReader = TeamReaderViewModel()
+    @State var nameLookup = PokemonNamesViewModel()
+    @ObservedObject var database = DatabaseViewModel()
+
+    @State var alertText = ""
+    @State var isAlerting = false
 
     init(text: String) {
         self.text = text
@@ -17,15 +24,65 @@ struct ShareExtensionView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                TextField("Copied Text", text: $text, axis: .vertical)
+                HStack {
+                    Text("Team Name: ")
+                        .font(.title2)
+                        .padding()
+                    TextField("Name...", text: $teamText)
+                        .textFieldStyle(.roundedBorder)
+                }
+                .padding()
+                TextField("Your New Pokémon Team", text: $text, axis: .vertical)
                     .lineLimit(3...6)
                     .textFieldStyle(.roundedBorder)
+                Button {
+                    let team = teamReader.readTeam(text)
+                    var pokemonList: [Pokemon] = []
+                    for pokemonEntry in team {
+                        let newID = Pokemon.getUniqueId()
+                        if let pokemon = teamReader.newValidPokemon(from: pokemonEntry, nameData: nameLookup.filteredResults, id: newID) {
+                            pokemonList.append(pokemon)
+                        } else {
+                            print(pokemonEntry.species)
+                        }
+                    }
+                    let newTeam = Team(
+                        id: Team.getUniqueId(), name: teamText,
+                        isFavourite: false, pokemonIDs: pokemonList.map { $0.id })
+                    for pokemon in pokemonList {
+                        let success = database.addPokemon(pokemon)
+                        if !success {
+                            alertText = "Could not add Pokémon!"
+                            isAlerting = true
+                        }
+                    }
+                    let success = database.addTeam(newTeam)
+                    if !success {
+                        alertText = "Could not add team!"
+                        isAlerting = true
+                    } else {
+                        alertText = "Team added!"
+                        isAlerting = true
+                    }
+                } label: {
+                    Text("Save Team!")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
                 Spacer()
             }
             .padding()
-            .navigationTitle("Share Extension")
+            .navigationTitle("Import Pokémon Team")
             .toolbar {
                 Button("Cancel") {
+                    self.close()
+                }
+            }
+            .task {
+                await nameLookup.loadNames()
+            }
+            .alert(alertText, isPresented: $isAlerting) {
+                Button("OK", role: .cancel) {
                     self.close()
                 }
             }

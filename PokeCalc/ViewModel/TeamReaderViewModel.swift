@@ -65,6 +65,21 @@ class TeamReaderViewModel {
         return team
     }
 
+    func newValidPokemon(from entry: PokemonEntry, nameData: [PokemonBriefData], id: Int) -> Pokemon? {
+        let searchableEntry = entry.species.lowercased()
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: " ", with: "-")
+        guard let pokemon = nameData.first(where: { $0.name == searchableEntry }) else {
+            return nil
+        }
+        return Pokemon(
+            id: id, pokemonNumber: pokemon.apiID,
+            item: entry.item ?? "", level: entry.level,
+            ability: entry.ability ?? "",
+            effortValues: entry.effortValues,
+            nature: entry.nature, moves: entry.moves)
+    }
+
     struct PokemonEntry: Hashable {
         var species: String
         var nickname: String?
