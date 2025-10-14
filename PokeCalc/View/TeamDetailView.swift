@@ -15,6 +15,12 @@ struct TeamDetailView: View {
     var team: Team? {
         database.teams.first(where: { $0.id == id })
     }
+    
+    var teamPoke: [Pokemon] {
+        (team?.pokemonIDs ?? []).compactMap { id in
+            database.pokemon.first(where: { $0.id == id })
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -23,13 +29,30 @@ struct TeamDetailView: View {
                 .bold()
             
             List {
-                ForEach(team?.pokemonIDs ?? [], id:\.self) { id in
-                    Text("Pokemon Number: \(id)")
+                ForEach(teamPoke, id:\.id) { pokemon in
+                    HStack {
+                        let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
+                        AsyncImage(url: URL(string: url)) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image
+                            case .failure:
+                                EmptyView()
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        
+                        Text("Pokemon Number: \(pokemon.pokemonNumber)")
+                    }
                 }
             }
             .onAppear {
                 Task {
                     database.refresh()
+                    
                 }
             }
         }
