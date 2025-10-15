@@ -6,7 +6,7 @@
 //
 
 import Foundation
-/*
+
 struct BattleDataFetcher: APIFetchable {
     typealias Parameters = Int
     typealias FetchedData = BattleData
@@ -36,11 +36,15 @@ struct BattleDataFetcher: APIFetchable {
 
         func convert() -> BattleData {
             var baseStats = PokemonStats(hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0)
+            let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
+            for (index, name) in statNames.enumerated() {
+                baseStats.addStat(name: name, value: stats[index].baseStat)
+            }
             return BattleData(
                 abilities: self.abilities.map { $0.name },
-                moves: self.moves.map { $0.move },
+                moves: self.moves.map { ($0.move.name, $0.move.url) },
                 stats: baseStats,
-                types: self.types,
+                types: self.types.map { ($0.name, $0.url) },
                 weight: self.weight)
         }
 
@@ -71,11 +75,10 @@ struct BattleDataFetcher: APIFetchable {
     }
 
     struct BattleData {
-        let abilities: self.abilities.map { $0.name },
-        let moves: self.moves.map { $0.move },
-        let stats: baseStats,
-        let types: TypeData
+        let abilities: [String]
+        let moves: [(String, URL)]
+        let stats: PokemonStats
+        let types: [(String, URL)]
         let weight: Int
     }
 }
-*/
