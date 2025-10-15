@@ -31,9 +31,29 @@ struct AddPokemonView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("**Current Pokemon**: \(pokemonName.readableFormat())")
-                Text("**Pokemon Number**: \(pokemonNumber)")
-                
+                HStack {
+                    let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemonNumber).png"
+                    AsyncImage(url: URL(string: url)) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 125, height: 125)
+                        case .failure:
+                            Image("decamark")
+                        @unknown default:
+                            Image("decamark")
+                        }
+                    }
+                    
+                    VStack {
+                        Text("**Current Pokemon**: \(pokemonName.readableFormat())")
+                        Text("**Pokemon Number**: \(pokemonNumber)")
+                    }
+                }
         
                 NavigationLink {
                     ItemLookupView(pokeID: 0, itemTF: $item)
@@ -48,9 +68,9 @@ struct AddPokemonView: View {
                             case .success(let image):
                                 image
                             case .failure:
-                                Image("0")
+                                Image("decamark")
                             @unknown default:
-                                Image("0")
+                                Image("decamark")
                             }
                         }
                         Text("item: \(item == "" ? "None" : item.readableFormat())")
