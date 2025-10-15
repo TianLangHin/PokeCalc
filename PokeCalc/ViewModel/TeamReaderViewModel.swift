@@ -66,12 +66,7 @@ class TeamReaderViewModel {
     }
 
     func newValidPokemon(from entry: PokemonEntry, nameData: [PokemonBriefData], id: Int) -> Pokemon? {
-        var searchableEntry = entry.species.lowercased()
-            .trimmingCharacters(in: .whitespaces)
-            .replacingOccurrences(of: " ", with: "-")
-        if searchableEntry.hasPrefix("ogerpon-") {
-            searchableEntry += "-mask"
-        }
+        let searchableEntry = entry.species.apiPokemonFormat()
         guard let pokemon = nameData.first(where: { $0.name == searchableEntry }) else {
             return nil
         }

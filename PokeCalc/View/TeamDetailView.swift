@@ -32,13 +32,11 @@ struct TeamDetailView: View {
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
                     NavigationLink {
-                        PokemonEditView(pokeID: pokemon.id, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())
+                        PokemonEditView(pokeID: pokemon.id, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())
                             .environmentObject(database)
                     } label: {
                         HStack {
-                            let item = pokemon.item.lowercased()
-                                .replacingOccurrences(of: " ", with: "-")
-                                .replacingOccurrences(of: "'", with: "")
+                            let item = pokemon.item.apiItemFormat()
                             let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
                             VStack {
                                 Spacer()
@@ -69,7 +67,7 @@ struct TeamDetailView: View {
                                 }
                             }
                             VStack {
-                                Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())")
+                                Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())")
                                 Text("Pokemon Number: \(pokemon.pokemonNumber)")
                             }
                         }
