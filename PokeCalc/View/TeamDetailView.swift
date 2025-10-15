@@ -36,7 +36,9 @@ struct TeamDetailView: View {
                             .environmentObject(database)
                     } label: {
                         HStack {
-                            let item = pokemon.item.lowercased().replacingOccurrences(of: " ", with: "-")
+                            let item = pokemon.item.lowercased()
+                                .replacingOccurrences(of: " ", with: "-")
+                                .replacingOccurrences(of: "'", with: "")
                             let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
                             VStack {
                                 Spacer()
