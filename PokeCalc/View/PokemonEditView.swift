@@ -43,7 +43,7 @@ struct PokemonEditView: View {
                 }
                 
                 NavigationLink {
-                    ItemLookupView(pokeID: pokeID)
+                    ItemLookupView(pokeID: pokeID, itemTF: .constant(""))
                         .environmentObject(database)
                 } label: {
                     Text("item: \((pokemon?.item ?? "None").readableFormat())")

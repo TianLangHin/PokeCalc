@@ -15,6 +15,7 @@ struct ItemLookupView: View {
     @State var itemLookup = ItemsViewModel()
     @State var pokeID: Int
     @State var isLoaded = false
+    @Binding var itemTF: String
     
     var pokemon: Pokemon? {
         database.pokemon.first(where: { $0.id == pokeID })
@@ -36,6 +37,9 @@ struct ItemLookupView: View {
                                 if database.updatePokemon(pokemon) {
                                     dismiss()
                                 }
+                            } else if (pokeID == 0) {
+                                itemTF = itemData
+                                dismiss()
                             }
                         }) {
                             HStack {

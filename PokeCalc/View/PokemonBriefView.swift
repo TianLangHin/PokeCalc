@@ -39,6 +39,7 @@ struct PokemonBriefView: View {
         .sheet(isPresented: $isShowingSheet) {
             AddPokemonView(isDismiss: $isDismiss, pokemonNumber: pokemonNumber, pokemonName: pokemonName, team: team)
                 .environmentObject(database)
+                .presentationDragIndicator(.visible)
         }
     }
 }
