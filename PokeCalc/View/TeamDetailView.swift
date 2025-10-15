@@ -32,6 +32,23 @@ struct TeamDetailView: View {
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
                     HStack {
+                        let item = pokemon.item.lowercased().replacingOccurrences(of: " ", with: "-")
+                        let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
+                        VStack {
+                            Spacer()
+                            AsyncImage(url: URL(string: imageUrl)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                case .success(let image):
+                                    image
+                                case .failure:
+                                    Image("decamark")
+                                @unknown default:
+                                    Image("decamark")
+                                }
+                            }
+                        }
                         let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
                         AsyncImage(url: URL(string: url)) { phase in
                             switch phase {
@@ -45,7 +62,6 @@ struct TeamDetailView: View {
                                 EmptyView()
                             }
                         }
-                        
                         VStack {
                             Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())")
                             Text("Pokemon Number: \(pokemon.pokemonNumber)")

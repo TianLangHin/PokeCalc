@@ -24,17 +24,18 @@ struct ShareExtensionView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 HStack {
                     Text("Team Name: ")
                         .font(.title2)
+                        .bold()
                         .padding()
                     TextField("Name...", text: $teamText)
                         .textFieldStyle(.roundedBorder)
                 }
                 .padding()
                 TextField("Your New Pokémon Team", text: $text, axis: .vertical)
-                    .lineLimit(3...6)
+                    .lineLimit(10...20)
                     .textFieldStyle(.roundedBorder)
                 Button {
                     let team = teamReader.readTeam(text)
