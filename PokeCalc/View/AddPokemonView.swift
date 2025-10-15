@@ -17,6 +17,7 @@ struct AddPokemonView: View {
     @State var pokemonName: String
     @State var team: Team?
     
+    @State var data: BattleDataFetcher.BattleData?
     @State var item = ""
     @State var level = 1
     @State var ability = ""
@@ -56,13 +57,23 @@ struct AddPokemonView: View {
                     }
                 }
                 
-                
                 TextField("Level", value: $level, format: .number)
                     .textFieldStyle(.roundedBorder)
                     .padding()
-                TextField("Ability", text: $ability)
-                    .textFieldStyle(.roundedBorder)
-                    .padding()
+                
+                HStack {
+                    Text("Ability: \(self.ability.readableFormat())")
+                    
+                    if let data = self.data {
+                        Picker("Ability", selection: $ability) {
+                            ForEach(data.abilities, id: \.self) { ability in
+                                Text(ability.readableFormat())
+                            }
+                        }
+                    }
+                }
+                .padding()
+                
                 TextField("Nature", text: $nature)
                     .textFieldStyle(.roundedBorder)
                     .padding()
@@ -99,6 +110,18 @@ struct AddPokemonView: View {
             .alert("Add Pokémon to Team Failed", isPresented: $addToTeamAlert) {
                 Button("OK", role: .cancel) {}
             }
+        }
+        .task {
+            await loadBattleData()
+        }
+    }
+    
+    func loadBattleData() async {
+        let fetcher = BattleDataFetcher()
+        self.data = await fetcher.fetch(self.pokemonNumber)
+        if let data = self.data {
+            // All Pokemon have at the very least one ability, so forcefully unwrapping like this will not cause any problems.
+            self.ability = data.abilities.first!
         }
     }
 }
