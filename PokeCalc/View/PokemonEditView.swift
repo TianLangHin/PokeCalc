@@ -46,7 +46,7 @@ struct PokemonEditView: View {
                     ItemLookupView(pokeID: pokeID)
                         .environmentObject(database)
                 } label: {
-                    Text("item: \(pokemon?.item ?? "None")")
+                    Text("item: \((pokemon?.item ?? "None").readableFormat())")
                 }
             }
             Text("level: \(pokemon?.level ?? 0)")

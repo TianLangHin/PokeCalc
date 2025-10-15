@@ -52,7 +52,7 @@ struct ItemLookupView: View {
                                         Image("0")
                                     }
                                 }
-                                Text(itemData.stringConverter())
+                                Text(itemData.readableFormat())
                             }
                         }
                     }
