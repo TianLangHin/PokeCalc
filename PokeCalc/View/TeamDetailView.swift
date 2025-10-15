@@ -12,11 +12,11 @@ struct TeamDetailView: View {
     @State var id: Int
     @EnvironmentObject var database: DatabaseViewModel
     @State var pokeName = PokemonNamesViewModel()
-    
+
     var team: Team? {
         database.teams.first(where: { $0.id == id })
     }
-    
+
     var teamPoke: [Pokemon] {
         (team?.pokemonIDs ?? []).compactMap { id in
             database.pokemon.first(where: { $0.id == id })
@@ -30,7 +30,7 @@ struct TeamDetailView: View {
                 .bold()
             
             List {
-                ForEach(teamPoke, id:\.id) { pokemon in
+                ForEach(teamPoke, id: \.self) { pokemon in
                     HStack {
                         let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
                         AsyncImage(url: URL(string: url)) { phase in
@@ -52,6 +52,7 @@ struct TeamDetailView: View {
                         }
                     }
                 }
+                .onDelete(perform: deletePokemon)
             }
             .onAppear {
                 Task {
@@ -86,6 +87,17 @@ struct TeamDetailView: View {
         if let index = database.teams.firstIndex(where: {$0.id == id}) {
             database.teams[index].toggleFavourite()
             database.updateTeam(database.teams[index])
+        }
+    }
+
+    func deletePokemon(at offsets: IndexSet) {
+        if let validTeam = team {
+            var newPokemonIDs = validTeam.pokemonIDs
+            newPokemonIDs.remove(atOffsets: offsets)
+            let newTeam = Team(
+                id: validTeam.id, name: validTeam.name,
+                isFavourite: validTeam.isFavourite, pokemonIDs: newPokemonIDs)
+            database.updateTeam(newTeam)
         }
     }
 }
