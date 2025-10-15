@@ -11,6 +11,7 @@ import Foundation
 struct TeamDetailView: View {
     @State var id: Int
     @EnvironmentObject var database: DatabaseViewModel
+    @State var pokeName = PokemonNamesViewModel()
     
     var team: Team? {
         database.teams.first(where: { $0.id == id })
@@ -45,14 +46,17 @@ struct TeamDetailView: View {
                             }
                         }
                         
-                        Text("Pokemon Number: \(pokemon.pokemonNumber)")
+                        VStack {
+                            Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())")
+                            Text("Pokemon Number: \(pokemon.pokemonNumber)")
+                        }
                     }
                 }
             }
             .onAppear {
                 Task {
                     database.refresh()
-                    
+                    await pokeName.loadNames()
                 }
             }
         }
@@ -85,6 +89,18 @@ struct TeamDetailView: View {
         }
     }
 }
+
+// I am putting this here for now
+extension String {
+    func stringConverter() -> String {
+        self
+            .split(separator: "-")
+            .map { $0.capitalized }
+            .joined(separator: " ")
+    }
+}
+
+
 
 //#Preview {
 //    TeamDetailView(team: Team(id: Team.getUniqueId(), name: "Team", isFavourite: false, pokemonIDs: [1000, 100+1, 100+2]))

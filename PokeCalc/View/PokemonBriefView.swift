@@ -31,7 +31,7 @@ struct PokemonBriefView: View {
                     EmptyView()
                 }
             }
-            Text(pokemonName)
+            Text(pokemonName.stringConverter())
         }
         .onTapGesture {
             isShowingSheet = true

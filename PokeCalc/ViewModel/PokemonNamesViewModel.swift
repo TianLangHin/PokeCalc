@@ -35,6 +35,11 @@ class PokemonNamesViewModel {
             pokemon.name.lowercased().contains(query.lowercased())
         }
     }
+    
+    
+    func getName(apiId: Int) -> String {
+        return allPokemon.first(where: { $0.apiID == apiId })?.name ?? "Unknown Pokemon"
+    }
 }
 
 struct PokemonBriefData: Hashable {
