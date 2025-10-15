@@ -26,9 +26,9 @@ struct PokemonBriefView: View {
                 case .success(let image):
                     image
                 case .failure:
-                    EmptyView()
+                    Image("0")
                 @unknown default:
-                    EmptyView()
+                    Image("0")
                 }
             }
             Text(pokemonName.stringConverter())
