@@ -19,27 +19,54 @@ struct PokemonEditView: View {
     
     
     var body: some View {
-        Text("**Pokemon:** \(pokemonSpecies), **ID:**: \(pokeID)")
-        Text("item: \(pokemon?.item ?? "None")")
-        Text("level: \(pokemon?.level ?? 0)")
-        Text("ability: \(pokemon?.ability ?? "No ability")")
-        Text("nature: \(pokemon?.nature ?? "No personality")")
-        Text("move 1: \(pokemon?.moves[0] ?? "None")")
-        Text("move 2: \(pokemon?.moves[1] ?? "None")")
-        Text("move 3: \(pokemon?.moves[2] ?? "None")")
-        Text("move 4: \(pokemon?.moves[3] ?? "None")")
-        
-        VStack {
-            Text("hp: \(pokemon?.effortValues.hp ?? 0)")
-            Text("atk: \(pokemon?.effortValues.attack ?? 0)")
-            Text("spatk: \(pokemon?.effortValues.specialAttack ?? 0)")
-            Text("spdef: \(pokemon?.effortValues.specialDefense ?? 0)")
-            Text("speed: \(pokemon?.effortValues.speed ?? 0)")
-            Text("def: \(pokemon?.effortValues.defense ?? 0)")
+        NavigationStack {
+            let imageurl = pokemon.map { pokemon in
+                let itemName = pokemon.item.lowercased()
+                    .replacingOccurrences(of: " ", with: "-")
+                    .replacingOccurrences(of: "'", with: "")
+                return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(itemName).png"
+            } ?? ""
+            
+            Text("**Pokemon:** \(pokemonSpecies), **ID:** \(pokeID)")
+            HStack {
+                AsyncImage(url: URL(string: imageurl)) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image
+                    case .failure:
+                        Image("decamark")
+                    @unknown default:
+                        Image("decamark")
+                    }
+                }
+                
+                NavigationLink {
+                    ItemLookupView(pokeID: pokeID)
+                        .environmentObject(database)
+                } label: {
+                    Text("item: \(pokemon?.item ?? "None")")
+                }
+            }
+            Text("level: \(pokemon?.level ?? 0)")
+            Text("ability: \(pokemon?.ability ?? "No ability")")
+            Text("nature: \(pokemon?.nature ?? "No personality")")
+            
+            // This is to work with preset team for now
+            Text("move 1: \(pokemon?.moves[0] ?? "None")")
+            Text("move 2: \(pokemon?.moves[1] ?? "None")")
+            Text("move 3: \(pokemon?.moves[2] ?? "None")")
+            Text("move 4: \(pokemon?.moves[3] ?? "None")")
+            
+            VStack {
+                Text("hp: \(pokemon?.effortValues.hp ?? 0)")
+                Text("atk: \(pokemon?.effortValues.attack ?? 0)")
+                Text("spatk: \(pokemon?.effortValues.specialAttack ?? 0)")
+                Text("spdef: \(pokemon?.effortValues.specialDefense ?? 0)")
+                Text("speed: \(pokemon?.effortValues.speed ?? 0)")
+                Text("def: \(pokemon?.effortValues.defense ?? 0)")
+            }
         }
-        
-        
-        
-        Text("FUCK YOU BRENMDANBJKSNOUCWBOPUCBGOPUWCBOUCVOWCBOU:LCVW")
     }
 }

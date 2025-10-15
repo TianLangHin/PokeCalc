@@ -20,7 +20,11 @@ class ItemsViewModel {
         let jsonDecoder = JSONDecoder()
 
         let endpoint = "https://pokeapi.co/api/v2/item"
-        guard let url = URL(string: endpoint) else {
+        guard var requestUrl = URLComponents(string: endpoint) else {
+            return
+        }
+        requestUrl.queryItems = [URLQueryItem(name: "limit", value: "10000")]
+        guard let url = requestUrl.url else {
             return
         }
         guard let (response, _) = try? await URLSession.shared.data(from: url) else {
