@@ -31,40 +31,45 @@ struct TeamDetailView: View {
             
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
-                    HStack {
-                        let item = pokemon.item.lowercased().replacingOccurrences(of: " ", with: "-")
-                        let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
-                        VStack {
-                            Spacer()
-                            AsyncImage(url: URL(string: imageUrl)) { phase in
+                    NavigationLink {
+                        PokemonEditView(pokeID: pokemon.id, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())
+                            .environmentObject(database)
+                    } label: {
+                        HStack {
+                            let item = pokemon.item.lowercased().replacingOccurrences(of: " ", with: "-")
+                            let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
+                            VStack {
+                                Spacer()
+                                AsyncImage(url: URL(string: imageUrl)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        ProgressView()
+                                    case .success(let image):
+                                        image
+                                    case .failure:
+                                        Image("decamark")
+                                    @unknown default:
+                                        Image("decamark")
+                                    }
+                                }
+                            }
+                            let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
+                            AsyncImage(url: URL(string: url)) { phase in
                                 switch phase {
                                 case .empty:
                                     ProgressView()
                                 case .success(let image):
                                     image
                                 case .failure:
-                                    Image("decamark")
+                                    EmptyView()
                                 @unknown default:
-                                    Image("decamark")
+                                    EmptyView()
                                 }
                             }
-                        }
-                        let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
-                        AsyncImage(url: URL(string: url)) { phase in
-                            switch phase {
-                            case .empty:
-                                ProgressView()
-                            case .success(let image):
-                                image
-                            case .failure:
-                                EmptyView()
-                            @unknown default:
-                                EmptyView()
+                            VStack {
+                                Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())")
+                                Text("Pokemon Number: \(pokemon.pokemonNumber)")
                             }
-                        }
-                        VStack {
-                            Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).stringConverter())")
-                            Text("Pokemon Number: \(pokemon.pokemonNumber)")
                         }
                     }
                 }
@@ -83,7 +88,7 @@ struct TeamDetailView: View {
                     toggleFavourite()
                 }) {
                     Image(systemName: team?.isFavourite ?? false ? "heart.fill" : "heart")
-                        .foregroundColor(team?.isFavourite ?? false ? .red : .gray)
+                        .foregroundColor(.red)
                 }
             }
             
@@ -118,15 +123,6 @@ struct TeamDetailView: View {
     }
 }
 
-// I am putting this here for now
-extension String {
-    func stringConverter() -> String {
-        self
-            .split(separator: "-")
-            .map { $0.capitalized }
-            .joined(separator: " ")
-    }
-}
 
 
 
