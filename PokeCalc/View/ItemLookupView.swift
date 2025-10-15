@@ -43,19 +43,7 @@ struct ItemLookupView: View {
                             }
                         }) {
                             HStack {
-                                let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(itemData).png"
-                                AsyncImage(url: URL(string: url)) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        ProgressView()
-                                    case .success(let image):
-                                        image
-                                    case .failure:
-                                        Image("0")
-                                    @unknown default:
-                                        Image("0")
-                                    }
-                                }
+                                ItemImageView(item: itemData)
                                 Text(itemData.readableFormat())
                                     .foregroundStyle(.black)
                             }

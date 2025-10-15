@@ -37,35 +37,12 @@ struct TeamDetailView: View {
                     } label: {
                         HStack {
                             let item = pokemon.item.apiItemFormat()
-                            let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
                             VStack {
                                 Spacer()
-                                AsyncImage(url: URL(string: imageUrl)) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        ProgressView()
-                                    case .success(let image):
-                                        image
-                                    case .failure:
-                                        Image("decamark")
-                                    @unknown default:
-                                        Image("decamark")
-                                    }
-                                }
+                                ItemImageView(item: item)
                             }
-                            let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.pokemonNumber).png"
-                            AsyncImage(url: URL(string: url)) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                case .success(let image):
-                                    image
-                                case .failure:
-                                    Image("0")
-                                @unknown default:
-                                    Image("0")
-                                }
-                            }
+                            
+                            PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
                             VStack {
                                 Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())")
                                 Text("Pokemon Number: \(pokemon.pokemonNumber)")

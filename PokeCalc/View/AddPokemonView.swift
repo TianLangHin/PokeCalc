@@ -60,19 +60,7 @@ struct AddPokemonView: View {
                         .environmentObject(database)
                 } label: {
                     HStack(spacing: 10) {
-                        let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
-                        AsyncImage(url: URL(string: url)) { phase in
-                            switch phase {
-                            case .empty:
-                                ProgressView()
-                            case .success(let image):
-                                image
-                            case .failure:
-                                Image("decamark")
-                            @unknown default:
-                                Image("decamark")
-                            }
-                        }
+                        ItemImageView(item: item)
                         Text("item: \(item == "" ? "None" : item.readableFormat())")
                     }
                 }
@@ -82,7 +70,7 @@ struct AddPokemonView: View {
                     .padding()
                 
                 HStack {
-                    Text("Ability: \(self.ability.readableFormat())")
+                    Text("Ability:")
                     
                     if let data = self.data {
                         Picker("Ability", selection: $ability) {

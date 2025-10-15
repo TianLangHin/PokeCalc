@@ -20,27 +20,17 @@ struct PokemonEditView: View {
     
     var body: some View {
         NavigationStack {
-            let imageurl = pokemon.map { pokemon in
-                let itemName = pokemon.item.lowercased()
+            
+            var itemName: String {
+                pokemon?.item.lowercased()
                     .replacingOccurrences(of: " ", with: "-")
-                    .replacingOccurrences(of: "'", with: "")
-                return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(itemName).png"
-            } ?? ""
+                    .replacingOccurrences(of: "'", with: "") ?? ""
+            }
+                
             
             Text("**Pokemon:** \(pokemonSpecies), **ID:** \(pokeID)")
             HStack {
-                AsyncImage(url: URL(string: imageurl)) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image
-                    case .failure:
-                        Image("decamark")
-                    @unknown default:
-                        Image("decamark")
-                    }
-                }
+                ItemImageView(item: itemName)
                 
                 NavigationLink {
                     ItemLookupView(pokeID: pokeID, itemTF: .constant(""))

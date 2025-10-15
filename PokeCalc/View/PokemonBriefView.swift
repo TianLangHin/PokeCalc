@@ -18,19 +18,7 @@ struct PokemonBriefView: View {
 
     var body: some View {
         HStack {
-            let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemonNumber).png"
-            AsyncImage(url: URL(string: url)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image
-                case .failure:
-                    Image("0")
-                @unknown default:
-                    Image("0")
-                }
-            }
+            PokemonImageView(pokemonNumber: pokemonNumber)
             Text(pokemonName.readableFormat())
         }
         .onTapGesture {
