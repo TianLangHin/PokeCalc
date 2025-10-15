@@ -14,7 +14,7 @@ struct BattleDataFetcher: APIFetchable {
     func fetch(_ pokemonNumber: Int) async -> BattleData? {
         let jsonDecoder = JSONDecoder()
 
-        let endpoint = URL(string: "https://pokeapi.co/api/v2/pokemon")
+        let endpoint = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonNumber)")
         guard let url = endpoint else {
             return nil
         }
@@ -24,7 +24,7 @@ struct BattleDataFetcher: APIFetchable {
         guard let data = try? jsonDecoder.decode(RawBattleData.self, from: response) else {
             return nil
         }
-        return data.convert()
+        return self.convert(data: data)
     }
 
     struct RawBattleData: Codable {
@@ -34,22 +34,12 @@ struct BattleDataFetcher: APIFetchable {
         let types: [TypeData]
         let weight: Int
 
-        func convert() -> BattleData {
-            var baseStats = PokemonStats(hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0)
-            let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
-            for (index, name) in statNames.enumerated() {
-                baseStats.addStat(name: name, value: stats[index].baseStat)
-            }
-            return BattleData(
-                abilities: self.abilities.map { $0.name },
-                moves: self.moves.map { ($0.move.name, $0.move.url) },
-                stats: baseStats,
-                types: self.types.map { ($0.name, $0.url) },
-                weight: self.weight)
-        }
-
         struct AbilityData: Codable {
-            let name: String
+            let ability: RawAbilityData
+
+            struct RawAbilityData: Codable {
+                let name: String
+            }
         }
 
         struct MoveData: Codable {
@@ -63,14 +53,19 @@ struct BattleDataFetcher: APIFetchable {
 
         struct StatData: Codable {
             let baseStat: Int
+
             enum CodingKeys: String, CodingKey {
                 case baseStat = "base_stat"
             }
         }
 
         struct TypeData: Codable {
-            let name: String
-            let url: URL
+            let type: RawTypeData
+
+            struct RawTypeData: Codable {
+                let name: String
+                let url: URL
+            }
         }
     }
 
@@ -80,5 +75,19 @@ struct BattleDataFetcher: APIFetchable {
         let stats: PokemonStats
         let types: [(String, URL)]
         let weight: Int
+    }
+
+    func convert(data: RawBattleData) -> BattleData {
+        var baseStats = PokemonStats(hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0)
+        let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
+        for (index, name) in statNames.enumerated() {
+            baseStats.addStat(name: name, value: data.stats[index].baseStat)
+        }
+        return BattleData(
+            abilities: data.abilities.map { $0.ability.name },
+            moves: data.moves.map { ($0.move.name, $0.move.url) },
+            stats: baseStats,
+            types: data.types.map { ($0.type.name, $0.type.url) },
+            weight: data.weight)
     }
 }
