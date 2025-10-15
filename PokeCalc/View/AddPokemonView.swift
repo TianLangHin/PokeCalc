@@ -11,6 +11,8 @@ struct AddPokemonView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: DatabaseViewModel
 
+    @Binding var isDismiss: Bool
+    
     @State var pokemonNumber: Int
     @State var pokemonName: String
     @State var team: Team?
@@ -59,6 +61,7 @@ struct AddPokemonView: View {
                     addToTeamAlert = !database.updateTeam(team)
                 }
                 addPokemonAlert = !database.addPokemon(pokemon)
+                isDismiss = true
                 dismiss()
             } label: {
                 Text("Add Pokémon")

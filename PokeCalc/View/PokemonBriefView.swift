@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonBriefView: View {
     @EnvironmentObject var database: DatabaseViewModel
-
+    @Binding var isDismiss: Bool
     @State var pokemonNumber: Int
     @State var pokemonName: String
     @State var team: Team?
@@ -37,7 +37,7 @@ struct PokemonBriefView: View {
             isShowingSheet = true
         }
         .sheet(isPresented: $isShowingSheet) {
-            AddPokemonView(pokemonNumber: pokemonNumber, pokemonName: pokemonName, team: team)
+            AddPokemonView(isDismiss: $isDismiss, pokemonNumber: pokemonNumber, pokemonName: pokemonName, team: team)
                 .environmentObject(database)
         }
     }

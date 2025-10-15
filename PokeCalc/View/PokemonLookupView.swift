@@ -9,7 +9,8 @@ import SwiftUI
 
 struct PokemonLookupView: View {
     @EnvironmentObject var database: DatabaseViewModel
-
+    @Environment(\.dismiss) var dismiss
+    @State var isDismiss: Bool = false
     @State var namesLookup = PokemonNamesViewModel()
     @State var team: Team?
     @State var isLoaded = false
@@ -23,7 +24,7 @@ struct PokemonLookupView: View {
                     .padding()
                 List {
                     ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
-                        PokemonBriefView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
+                        PokemonBriefView(isDismiss: $isDismiss, pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
                             .environmentObject(database)
                     }
                 }
@@ -36,5 +37,16 @@ struct PokemonLookupView: View {
             await namesLookup.loadNames()
             isLoaded = true
         }
+        .onChange(of: isDismiss) { oldValue, newValue in
+            if newValue {
+               dismissSelf()
+            }
+        }
+    }
+    
+    
+    func dismissSelf() {
+        isDismiss = false
+        dismiss()
     }
 }

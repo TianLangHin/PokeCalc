@@ -54,10 +54,10 @@ struct PokemonEditView: View {
             Text("nature: \(pokemon?.nature ?? "No personality")")
             
             // This is to work with preset team for now
-            Text("move 1: \(pokemon?.moves[0] ?? "None")")
-            Text("move 2: \(pokemon?.moves[1] ?? "None")")
-            Text("move 3: \(pokemon?.moves[2] ?? "None")")
-            Text("move 4: \(pokemon?.moves[3] ?? "None")")
+            Text("move 1: \(pokemon?.getMove(at: 0) ?? "None")")
+            Text("move 2: \(pokemon?.getMove(at: 1) ?? "None")")
+            Text("move 3: \(pokemon?.getMove(at: 2) ?? "None")")
+            Text("move 4: \(pokemon?.getMove(at: 3) ?? "None")")
             
             VStack {
                 Text("hp: \(pokemon?.effortValues.hp ?? 0)")

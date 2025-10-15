@@ -53,6 +53,7 @@ struct ItemLookupView: View {
                                     }
                                 }
                                 Text(itemData.readableFormat())
+                                    .foregroundStyle(.black)
                             }
                         }
                     }
