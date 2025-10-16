@@ -22,10 +22,12 @@ struct AddPokemonView: View {
     @State var level = 1
     @State var ability = ""
     @State var nature = "Serious"
-    @State var move1 = ""
-    @State var move2 = ""
-    @State var move3 = ""
-    @State var move4 = ""
+    @State var move1 = "None"
+    @State var move2 = "None"
+    @State var move3 = "None"
+    @State var move4 = "None"
+    
+    @State var abilityList: [String] = []
     
     @State var moveListName: [String] = []
     @State var pokeType: [String] = []
@@ -90,59 +92,11 @@ struct AddPokemonView: View {
                             .font(.title3)
                         
                         if let data = self.data {
-                            Picker(selection: $ability, label:
-                                    HStack {
-                                Text("Ability:")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(.gray)
-                            }
-                            ) {
-                                ForEach(data.abilities, id: \.self) { ability in
-                                    Text("\(ability.readableFormat())")
-                                        .foregroundStyle(.black)
-                                }
-                            }
-                            .pickerStyle(.navigationLink)
-                            .padding(20)
-                            .padding(.horizontal, 5)
-                            .background(Color.gray.opacity(0.05))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                    .padding(.horizontal, 15)
-                                    .padding(.vertical, 5)
-                            )
+                            PickerView(selection: $ability, listOfItems: data.abilities, pickerTitle: "Ability:")
                         }
                         
                         
-                        Picker(selection: $nature, label:
-                                HStack {
-                            Text("Nature:")
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.gray)
-                        }
-                        ) {
-                            ForEach(POKEMON_NATURES, id: \.self) { nature in
-                                HStack {
-                                    Text("\(nature.readableFormat())")
-                                        .foregroundStyle(.black)
-                                }
-                            }
-                        }
-                        .pickerStyle(.navigationLink)
-                        .padding(20)
-                        .padding(.horizontal, 5)
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray, lineWidth: 1)
-                                .padding(.horizontal, 15)
-                                .padding(.vertical, 5)
-                        )
+                        PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
                     }
                     .padding(.bottom, 20)
                     
@@ -213,6 +167,8 @@ struct AddPokemonView: View {
             self.ability = data.abilities.first!
             self.moveListName = data.moves.map{ $0.0 }
             self.pokeType = data.types.map{ $0.0 }
+            
+            self.abilityList = data.abilities
         }
     }
     
