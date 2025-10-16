@@ -34,9 +34,10 @@ struct ItemLookupView: View {
                         Button(action: {
                             if var pokemon = self.pokemon {
                                 pokemon.item = itemData
-                                if database.updatePokemon(pokemon) {
-                                    dismiss()
-                                }
+                                dismiss()
+//                                if database.updatePokemon(pokemon) {
+//                                    dismiss()
+//                                }
                             } else if (pokeID == 0) {
                                 itemTF = itemData
                                 dismiss()

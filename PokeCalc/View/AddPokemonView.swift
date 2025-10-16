@@ -106,10 +106,14 @@ struct AddPokemonView: View {
                             .font(.title3)
                         
                         if self.data != nil {
-                            MovePickerView(title: "Move 1:", selection: $move1, allMoves: moveListName)
-                            MovePickerView(title: "Move 2:", selection: $move2, allMoves: moveListName)
-                            MovePickerView(title: "Move 3:", selection: $move3, allMoves: moveListName)
-                            MovePickerView(title: "Move 4:", selection: $move4, allMoves: moveListName)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move1, currentMoveNum: 1)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move2, currentMoveNum: 2)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move3, currentMoveNum: 3)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move4, currentMoveNum: 4)
+                                .environmentObject(database)
                         }
                     }
                     .padding(.bottom, 30)
@@ -164,8 +168,10 @@ struct AddPokemonView: View {
         self.data = await fetcher.fetch(self.pokemonNumber)
         if let data = self.data {
             // All Pokemon have at the very least one ability, so forcefully unwrapping like this will not cause any problems.
-            self.ability = data.abilities.first!
-            self.moveListName = data.moves.map{ $0.0 }
+            if ability == "" {
+                self.ability = data.abilities.first!
+            }
+            self.moveListName = data.moves.map{ $0.0 }.sorted()
             self.pokeType = data.types.map{ $0.0 }
             
             self.abilityList = data.abilities
