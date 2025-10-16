@@ -46,7 +46,7 @@ class ItemsViewModel {
 
     private func filter(_ data: [String], on query: String) -> [String] {
         return data.filter { item in
-            item.lowercased().contains(query.lowercased())
+            item.lowercased().contains(query.lowercased().replacingOccurrences(of: " ", with: "-"))
         }
     }
 }
