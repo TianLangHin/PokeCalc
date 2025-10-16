@@ -75,7 +75,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/BattleDataFetcher.swift,
+				Model/ColorExtension.swift,
 				Model/DatabaseController.swift,
+				Model/Nature.swift,
 				Model/Pokemon.swift,
 				Model/PokemonNamesFetcher.swift,
 				Model/PokemonStats.swift,
@@ -94,7 +96,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/BattleDataFetcher.swift,
+				Model/ColorExtension.swift,
 				Model/DatabaseController.swift,
+				Model/Nature.swift,
 				Model/Pokemon.swift,
 				Model/PokemonNamesFetcher.swift,
 				Model/PokemonStats.swift,
@@ -113,7 +117,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/BattleDataFetcher.swift,
+				Model/ColorExtension.swift,
 				Model/DatabaseController.swift,
+				Model/Nature.swift,
 				Model/Pokemon.swift,
 				Model/PokemonNamesFetcher.swift,
 				Model/PokemonStats.swift,
@@ -132,7 +138,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/BattleDataFetcher.swift,
+				Model/ColorExtension.swift,
 				Model/DatabaseController.swift,
+				Model/Nature.swift,
 				Model/Pokemon.swift,
 				Model/PokemonNamesFetcher.swift,
 				Model/PokemonStats.swift,
