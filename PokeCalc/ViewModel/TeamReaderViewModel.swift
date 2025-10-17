@@ -73,7 +73,7 @@ class TeamReaderViewModel {
         return Pokemon(
             id: id, pokemonNumber: pokemon.apiID,
             item: entry.item ?? "", level: entry.level,
-            ability: entry.ability?.apiItemFormat() ?? "",
+            ability: entry.ability?.apiGenericFormat() ?? "",
             effortValues: entry.effortValues,
             nature: entry.nature, moves: entry.moves)
     }

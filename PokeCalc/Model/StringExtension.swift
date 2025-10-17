@@ -19,13 +19,23 @@ extension String {
             .lowercased()
             .trimmingCharacters(in: .whitespaces)
             .replacingOccurrences(of: " ", with: "-")
-        return baseString.hasPrefix("ogerpon-") ? baseString + "-mask" : baseString
+        if baseString.hasPrefix("ogerpon-") {
+            return baseString + "-mask"
+        } else if baseString.hasPrefix("indeedee-m") {
+            return "indeedee-male"
+        } else if baseString.hasPrefix("indeedee-f") {
+            return "indeedee-female"
+        } else {
+            return baseString
+        }
     }
 
-    func apiItemFormat() -> String {
+    func apiGenericFormat() -> String {
         self
             .lowercased()
             .replacingOccurrences(of: " ", with: "-")
             .replacingOccurrences(of: "'", with: "")
+            .replacingOccurrences(of: "(", with: "")
+            .replacingOccurrences(of: ")", with: "")
     }
 }

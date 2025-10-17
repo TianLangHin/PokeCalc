@@ -41,7 +41,7 @@ struct TeamDetailView: View {
                             .environmentObject(database)
                     } label: {
                         HStack {
-                            let item = pokemon.item.apiItemFormat()
+                            let item = pokemon.item.apiGenericFormat()
                             VStack {
                                 Spacer()
                                 ItemImageView(item: item)
