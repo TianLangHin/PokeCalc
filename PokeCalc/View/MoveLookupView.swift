@@ -31,7 +31,7 @@ struct MoveLookupView: View {
     var body: some View {
         VStack {
             if isLoaded {
-                TextField("Look for a Item...", text: $queryString)
+                TextField("Look for a Move...", text: $queryString)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .padding()
