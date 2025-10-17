@@ -11,15 +11,19 @@ struct ContentView: View {
     @EnvironmentObject var database: DatabaseViewModel
 
     @State var alerting = false
+    @State var selectedTab: Int = 0
+    
 
     var body: some View {
-        TabView {
-            PokemonLookupView(isViewing: false)
+        TabView(selection: $selectedTab){
+            PokemonLookupView(selectedTab: $selectedTab, isViewing: true)
                 .environmentObject(database)
                 .tabItem {
                     Image("ditto")
                     Text("Pokémon")
                 }
+                .tag(0)
+            
             NavigationStack {
                 TeamsView()
                     .environmentObject(database)
@@ -28,6 +32,8 @@ struct ContentView: View {
                 Image("pokemon")
                 Text("Teams")
             }
+            .tag(1)
+            
             VStack {
                 Text("Successful Initialisation: \(database.dbController.success)")
                 Text("Pokémon")
@@ -56,6 +62,7 @@ struct ContentView: View {
                 Image(systemName: "info.circle")
                 Text("Debug")
             }
+            .tag(2)
         }
     }
 }

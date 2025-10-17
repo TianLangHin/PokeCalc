@@ -15,16 +15,27 @@ struct PokemonLookupView: View {
     @State var team: Team?
     @State var isLoaded = false
     
+    @Binding var selectedTab: Int
+    
     @State var isViewing: Bool
 
     var body: some View {
         NavigationStack {
             VStack {
                 if isLoaded {
-                    TextField("Look for a Pokémon...", text: $namesLookup.queryString)
+                    TextField((isViewing ? "Look for an existing Pokémon setup..." : "Look for a Pokémon..."), text: $namesLookup.queryString)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .padding()
+                    
+                    if isViewing {
+                        Button(action: {
+                            selectedTab = 1
+                        }) {
+                            Text("Add a Pokemon to a Team NOW!")
+                        }
+                    }
+                    
                     List {
                         ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
                             if isViewing {
