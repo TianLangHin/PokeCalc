@@ -61,6 +61,12 @@ class DatabaseViewModel: ObservableObject {
         return success1 && success2
     }
 
+    func clearUnusedPokemon() -> Bool {
+        let success = self.dbController.deleteAllUnusedPokemon()
+        self.refresh()
+        return success
+    }
+
     func refresh() {
         self.pokemon = self.dbController.selectAllPokemon() ?? []
         let pokemonId = self.pokemon.map { $0.id }.max() ?? 0

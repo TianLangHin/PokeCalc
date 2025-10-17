@@ -76,6 +76,7 @@ struct TeamsView: View {
         for team in teamsToDelete {
             deleteSuccess = database.deleteTeam(by: team.id)
         }
+        deleteSuccess = database.clearUnusedPokemon()
     }
     
     func toggleFavourite(id: Int) {
