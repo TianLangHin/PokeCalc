@@ -75,8 +75,10 @@ struct TeamsView: View {
         let teamsToDelete = offsets.map { filteredTeam[$0] }
         for team in teamsToDelete {
             deleteSuccess = database.deleteTeam(by: team.id)
+            for id in team.pokemonIDs {
+                database.deletePokemon(by: id)
+            }
         }
-        deleteSuccess = database.clearUnusedPokemon()
     }
     
     func toggleFavourite(id: Int) {

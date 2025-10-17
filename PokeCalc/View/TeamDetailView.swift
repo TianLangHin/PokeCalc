@@ -101,7 +101,11 @@ struct TeamDetailView: View {
                 id: validTeam.id, name: validTeam.name,
                 isFavourite: validTeam.isFavourite, pokemonIDs: newPokemonIDs)
             database.updateTeam(newTeam)
-            database.clearUnusedPokemon()
+            for id in validTeam.pokemonIDs {
+                if !newPokemonIDs.contains(id) {
+                    database.deletePokemon(by: id)
+                }
+            }
         }
     }
 }

@@ -335,7 +335,7 @@ class DatabaseController {
     }
 
     func deleteAllPokemon() -> Bool {
-        let deleteString = "DELETE FROM \(pokemonTable)"
+        let deleteString = "DELETE FROM \(pokemonTable);"
         var stmt: OpaquePointer? = nil
         guard sqlite3_prepare_v2(db, deleteString, -1, &stmt, nil) == SQLITE_OK else {
             return false
@@ -348,28 +348,7 @@ class DatabaseController {
     }
 
     func deleteAllTeams() -> Bool {
-        let deleteString = "DELETE FROM \(teamsTable)"
-        var stmt: OpaquePointer? = nil
-        guard sqlite3_prepare_v2(db, deleteString, -1, &stmt, nil) == SQLITE_OK else {
-            return false
-        }
-        guard sqlite3_step(stmt) == SQLITE_DONE else {
-            return false
-        }
-        sqlite3_finalize(stmt)
-        return true
-    }
-
-    func deleteAllUnusedPokemon() -> Bool {
-        let deleteString = """
-        DELETE FROM \(pokemonTable)
-        WHERE PokemonID NOT IN (SELECT DISTINCT Pokemon1 FROM \(teamsTable)) AND
-        PokemonID NOT IN (SELECT DISTINCT Pokemon2 FROM \(teamsTable)) AND
-        PokemonID NOT IN (SELECT DISTINCT Pokemon3 FROM \(teamsTable)) AND
-        PokemonID NOT IN (SELECT DISTINCT Pokemon4 FROM \(teamsTable)) AND
-        PokemonID NOT IN (SELECT DISTINCT Pokemon5 FROM \(teamsTable)) AND
-        PokemonID NOT IN (SELECT DISTINCT Pokemon6 FROM \(teamsTable))
-        """
+        let deleteString = "DELETE FROM \(teamsTable);"
         var stmt: OpaquePointer? = nil
         guard sqlite3_prepare_v2(db, deleteString, -1, &stmt, nil) == SQLITE_OK else {
             return false

@@ -55,16 +55,10 @@ class DatabaseViewModel: ObservableObject {
     }
 
     func clear() -> Bool {
-        let success1 = self.dbController.deleteAllPokemon()
-        let success2 = self.dbController.deleteAllTeams()
+        let success1 = self.dbController.deleteAllTeams()
+        let success2 = self.dbController.deleteAllPokemon()
         self.refresh()
         return success1 && success2
-    }
-
-    func clearUnusedPokemon() -> Bool {
-        let success = self.dbController.deleteAllUnusedPokemon()
-        self.refresh()
-        return success
     }
 
     func refresh() {
