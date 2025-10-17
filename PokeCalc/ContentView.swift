@@ -17,7 +17,7 @@ struct ContentView: View {
             PokemonLookupView(isViewing: false)
                 .environmentObject(database)
                 .tabItem {
-                    Image(systemName: "circle")
+                    Image("ditto")
                     Text("Pokémon")
                 }
             NavigationStack {
@@ -25,7 +25,7 @@ struct ContentView: View {
                     .environmentObject(database)
             }
             .tabItem {
-                Image(systemName: "list.dash")
+                Image("pokemon")
                 Text("Teams")
             }
             VStack {
