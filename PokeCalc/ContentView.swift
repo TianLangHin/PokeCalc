@@ -10,92 +10,51 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var database: DatabaseViewModel
 
-    @State var alertPokemon = false
-    @State var alertTeam = false
-    @State var showingSheet = false
-
-    @State var c = 1
-    @State var nameNumber = 1
+    @State var alerting = false
 
     var body: some View {
-        NavigationStack {
+        TabView {
+            PokemonLookupView(isViewing: false)
+                .environmentObject(database)
+                .tabItem {
+                    Image(systemName: "circle")
+                    Text("Pokémon")
+                }
+            NavigationStack {
+                TeamsView()
+                    .environmentObject(database)
+            }
+            .tabItem {
+                Image(systemName: "list.dash")
+                Text("Teams")
+            }
             VStack {
                 Text("Successful Initialisation: \(database.dbController.success)")
-                HStack {
-                    Text("Pokemon")
-                    Button {
-                        showingSheet = true
-                    } label: {
-                        Text("Add")
-                    }
-                }
+                Text("Pokémon")
                 List {
                     ForEach(database.pokemon, id: \.self) { pokemon in
                         Text("\(pokemon)")
                     }
                 }
-                HStack {
-                    Text("Teams")
-                    Button {
-                        let team = Team(id: Team.getUniqueId(), name: "Team \(nameNumber)", isFavourite: false, pokemonIDs: [c, c+1, c+2])
-                        c += 1
-                        nameNumber += 1
-                        alertTeam = !database.addTeam(team)
-                    } label: {
-                        Text("Add Team")
-                    }
-                }
+                Text("Teams")
                 List {
                     ForEach(database.teams, id: \.self) { team in
                         Text("\(team)")
                     }
                 }
-                // Testing section for update/delete
                 Button {
-                    alertTeam = !database.updateTeam(Team(id: 1, name: "New!!", isFavourite: true, pokemonIDs: [1, 2]))
-                    alertPokemon = !database.updatePokemon(Pokemon(id: 1, pokemonNumber: 999, item: "N/A", level: 99, ability: "Sheer Force", effortValues: PokemonStats(hp: 1, attack: 1, defense: 1, specialAttack: 1, specialDefense: 1, speed: 1), nature: "Hardy", moves: ["Perish Song"]))
-                } label: {
-                    Text("Update 1")
-                }
-                Button {
-                    alertTeam = !database.deleteTeam(by: 1)
-                    alertPokemon = !database.deletePokemon(by: 1)
-                } label: {
-                    Text("Delete 1")
-                }
-                // Testing end
-                Button {
-                    let _ = database.clear()
+                    alerting = !database.clear()
                 } label: {
                     Text("Clear")
                 }
-                
-                // This is a testing button for the team list view:
-                NavigationLink {
-                    TeamsView()
-                        .environmentObject(database)
-                } label: {
-                    Text("Test Team List View")
-                }
-                
-                
-                NavigationLink {
-                    PokemonLookupView(isViewing: true)
-                        .environmentObject(database)
-                } label: {
-                    Text("Test pokemon setup")
-                }
             }
             .padding()
-            .alert("Pokemon Fail", isPresented: $alertPokemon) {
+            .alert("", isPresented: $alerting) {
                 Button("Dismiss", role: .cancel) {}
             }
-            .alert("Team Fail", isPresented: $alertTeam) {
-                Button("Dismiss", role: .cancel) {}
-            }
-            .sheet(isPresented: $showingSheet) {
-                PokemonLookupView(isViewing: false)
-                    .environmentObject(database)
+            .tabItem {
+                Image(systemName: "info.circle")
+                Text("Debug")
             }
         }
     }
