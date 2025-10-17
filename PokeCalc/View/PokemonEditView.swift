@@ -18,7 +18,7 @@ struct PokemonEditView: View {
     @State var initialised: Bool = false
     
     @State var data: BattleDataFetcher.BattleData?
-    @State var item = ""
+    @State var item = "None"
     @State var level = 1
     @State var ability = ""
     @State var nature = "Serious"
@@ -69,9 +69,6 @@ struct PokemonEditView: View {
                     
                     
                     
-                    
-                    
-                    Text("**Pokemon:** \(pokemonSpecies), **ID:** \(pokeID)")
                     HStack {
                         ItemImageView(item: item)
                         
@@ -178,7 +175,7 @@ struct PokemonEditView: View {
                     move3 = pokemon?.getMove(at: 2) ?? ""
                     move4 = pokemon?.getMove(at: 3) ?? ""
                     
-                    item = item != "" ? item : pokemon?.item ?? ""
+                    item = item != "" ? item : pokemon?.item ?? "None"
                     level = pokemon?.level ?? 1
                     ability = pokemon?.ability ?? "No ability"
                     nature = pokemon?.nature ?? "No personality"

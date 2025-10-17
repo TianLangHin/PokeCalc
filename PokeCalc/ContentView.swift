@@ -77,6 +77,14 @@ struct ContentView: View {
                 } label: {
                     Text("Test Team List View")
                 }
+                
+                
+                NavigationLink {
+                    PokemonLookupView(isViewing: true)
+                        .environmentObject(database)
+                } label: {
+                    Text("Test pokemon setup")
+                }
             }
             .padding()
             .alert("Pokemon Fail", isPresented: $alertPokemon) {
@@ -86,7 +94,7 @@ struct ContentView: View {
                 Button("Dismiss", role: .cancel) {}
             }
             .sheet(isPresented: $showingSheet) {
-                PokemonLookupView()
+                PokemonLookupView(isViewing: false)
                     .environmentObject(database)
             }
         }

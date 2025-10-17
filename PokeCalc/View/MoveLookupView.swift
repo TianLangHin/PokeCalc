@@ -44,10 +44,7 @@ struct MoveLookupView: View {
                                 } else {
                                     pokemon.moves.append(move)
                                 }
-                                
-                                //if database.updatePokemon(pokemon) {
-                                    dismiss()
-                                //}
+                                dismiss()
                             } else if (pokeID == 0) {
                                 currentMove = move
                                 dismiss()
