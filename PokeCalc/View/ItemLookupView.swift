@@ -32,17 +32,8 @@ struct ItemLookupView: View {
                 List {
                     ForEach(itemLookup.filteredResults, id: \.self) { itemData in
                         Button(action: {
-                            if var pokemon = self.pokemon {
-                                // pokemon.item = itemData
-                                itemTF = itemData
-                                dismiss()
-//                                if database.updatePokemon(pokemon) {
-//                                    dismiss()
-//                                }
-                            } else if (pokeID == 0) {
-                                itemTF = itemData
-                                dismiss()
-                            }
+                            itemTF = itemData
+                            dismiss()
                         }) {
                             HStack {
                                 ItemImageView(item: itemData)
