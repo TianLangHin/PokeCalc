@@ -66,7 +66,7 @@ struct PokeCalcWidgetEntryView : View {
     var body: some View {
         VStack {
             let pokemonData = db.selectAllPokemon() ?? []
-            if let team = db.selectAllTeams()?.first {
+            if let team = db.displayTeam() {
                 VStack(alignment: .center) {
                     Text(team.name)
                         .fontWeight(.bold)

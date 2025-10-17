@@ -380,4 +380,15 @@ class DatabaseController {
         sqlite3_finalize(stmt)
         return true
     }
+
+    func displayTeam() -> Team? {
+        let allTeams = self.selectAllTeams()?.sorted(by: { team1, team2 in
+            if team1.isFavourite == team2.isFavourite {
+                return team1.id < team2.id
+            } else {
+                return team1.isFavourite
+            }
+        })
+        return allTeams?.first
+    }
 }
