@@ -33,7 +33,8 @@ struct ItemLookupView: View {
                     ForEach(itemLookup.filteredResults, id: \.self) { itemData in
                         Button(action: {
                             if var pokemon = self.pokemon {
-                                pokemon.item = itemData
+                                // pokemon.item = itemData
+                                itemTF = itemData
                                 dismiss()
 //                                if database.updatePokemon(pokemon) {
 //                                    dismiss()

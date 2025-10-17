@@ -11,8 +11,14 @@ import SwiftUI
 struct ItemImageView: View {
     var item: String
     
+    var itemName: String {
+        item.lowercased()
+            .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: "'", with: "")
+    }
+    
     var body: some View {
-        let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(item).png"
+        let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\(itemName).png"
         AsyncImage(url: URL(string: url)) { phase in
             switch phase {
             case .empty:

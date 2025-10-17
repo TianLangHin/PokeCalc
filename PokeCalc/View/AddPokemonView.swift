@@ -210,10 +210,7 @@ struct AddPokemonView: View {
             return nil
         }
     }
-    
-    
-    
-    
+
     
     func getBackgroundColour(type: String) -> Color {
         switch type {

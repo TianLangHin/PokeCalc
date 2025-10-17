@@ -22,6 +22,7 @@ struct MoveChooserView: View {
         } label: {
             HStack(spacing: 10) {
                 Text("Move \(currentMoveNum):")
+                    .foregroundStyle(.black)
                 Spacer()
                 Text("\(move == "" ? "Select a Move" : move.readableFormat())")
                 Image(systemName: "chevron.right")
