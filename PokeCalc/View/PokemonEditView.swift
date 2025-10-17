@@ -174,7 +174,7 @@ struct PokemonEditView: View {
                     move3 = pokemon?.getMove(at: 2) ?? ""
                     move4 = pokemon?.getMove(at: 3) ?? ""
                     
-                    item = item != "" ? item : pokemon?.item ?? "None"
+                    item = pokemon?.item ?? "None"
                     level = pokemon?.level ?? 1
                     ability = pokemon?.ability ?? "No ability"
                     nature = pokemon?.nature ?? "No personality"
