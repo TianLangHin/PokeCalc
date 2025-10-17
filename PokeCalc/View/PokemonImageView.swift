@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PokemonImageView: View {
-    @State var pokemonNumber: Int
+    var pokemonNumber: Int
     
     var body: some View {
         let url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemonNumber).png"

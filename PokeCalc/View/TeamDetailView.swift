@@ -23,12 +23,17 @@ struct TeamDetailView: View {
         }
     }
 
+    @State var selectedPokemon = 0
     var body: some View {
         NavigationStack {
             Text(team?.name ?? "Placeholder")
                 .font(.largeTitle)
                 .bold()
-            
+            NavigationLink {
+                SwipeTeamView(team: team!, selectedPokemon: $selectedPokemon, size: CGFloat(300))
+            } label: {
+                Text("Swipe Team View, selected: \(selectedPokemon)")
+            }
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
                     NavigationLink {
