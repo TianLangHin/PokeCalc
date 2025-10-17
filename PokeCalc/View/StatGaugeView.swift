@@ -27,7 +27,6 @@ struct StatGaugeView: View {
         Gauge(value: Double(value), in: 0...252) {
             EmptyView()
         } currentValueLabel: {
-            Text("")
         } minimumValueLabel: {
             Text("0")
         } maximumValueLabel: {
