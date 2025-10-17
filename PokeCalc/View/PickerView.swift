@@ -20,7 +20,7 @@ struct PickerView: View {
             
             Spacer()
             Picker(selection: $selection, label: Text("")) {
-                ForEach(listOfItems, id: \.self) { item in
+                ForEach(listOfItems.sorted(), id: \.self) { item in
                     Text(item.readableFormat()).tag(item)
                 }
             }
