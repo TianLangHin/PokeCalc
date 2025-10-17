@@ -19,7 +19,7 @@ struct PokemonEditView: View {
     
     @State var data: BattleDataFetcher.BattleData?
     @State var item = "None"
-    @State var level = 1
+    @State var level = 100
     @State var ability = ""
     @State var nature = "Serious"
     @State var move1 = "None"
@@ -28,6 +28,9 @@ struct PokemonEditView: View {
     @State var move4 = "None"
     
     @State var abilityList: [String] = []
+    
+    @State var statNames: [String] = ["HP", "ATK", "DEF", "SpATK", "SpDEF", "SPE"]
+    @State var stats: [Int] = Array(repeating: 0, count: 6)
     
     @State var moveListName: [String] = []
     @State var pokeType: [String] = []
@@ -126,22 +129,19 @@ struct PokemonEditView: View {
                                 .environmentObject(database)
                         }
                     }
-                    .padding(.bottom, 30)
+                    .padding()
                     
+                    Text("**EVs**")
+                        .font(.title3)
                     
-                    
-                    // Stepper for eV 252 for each, step 4
-                    VStack {
-                        Text("hp: \(pokemon?.effortValues.hp ?? 0)")
-                        Text("atk: \(pokemon?.effortValues.attack ?? 0)")
-                        Text("spatk: \(pokemon?.effortValues.specialAttack ?? 0)")
-                        Text("spdef: \(pokemon?.effortValues.specialDefense ?? 0)")
-                        Text("speed: \(pokemon?.effortValues.speed ?? 0)")
-                        Text("def: \(pokemon?.effortValues.defense ?? 0)")
+                    Grid {
+                        ForEach(self.stats.indices, id: \.self) { index in
+                            GridRow {
+                                StatGaugeView(stat: self.statNames[index], value: self.$stats[index])
+                            }
+                        }
                     }
-                    
-                    
-                    
+                    .padding()
                     
                     Button {
                         let newPokemon = Pokemon(
@@ -150,10 +150,9 @@ struct PokemonEditView: View {
                             item: item,
                             level: level,
                             ability: ability,
-                            effortValues: PokemonStats(hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0),
+                            effortValues: PokemonStats(hp: stats[0], attack: stats[1], defense: stats[2], specialAttack: stats[3], specialDefense: stats[4], speed: stats[5]),
                             nature: nature,
                             moves: [move1, move2, move3, move4].filter({ !$0.isEmpty && $0 != "None"}))
-                        
                         let _ = database.updatePokemon(newPokemon)
                         isDismiss = true
                         dismiss()
@@ -196,6 +195,21 @@ struct PokemonEditView: View {
             self.moveListName = data.moves.map{ $0.0 }.sorted()
             self.pokeType = data.types.map{ $0.0 }
             self.abilityList = data.abilities
+            
+            let obtainedStats = [
+                0: pokemon?.effortValues.hp ?? 0,
+                1: pokemon?.effortValues.attack ?? 0,
+                2: pokemon?.effortValues.defense ?? 0,
+                3: pokemon?.effortValues.specialAttack ?? 0,
+                4: pokemon?.effortValues.specialDefense ?? 0,
+                5: pokemon?.effortValues.speed ?? 0
+            ]
+            
+            for (key, value) in obtainedStats {
+                if value != 0 {
+                    self.stats[key] = value
+                }
+            }
         }
     }
     
