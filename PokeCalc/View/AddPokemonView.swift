@@ -133,6 +133,11 @@ struct AddPokemonView: View {
                     }
                     .padding()
                     
+                    Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
+                        .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
+                        .foregroundStyle(.red)
+                        .padding()
+                        .multilineTextAlignment(.center)
                     
                     Spacer()
                     Button {

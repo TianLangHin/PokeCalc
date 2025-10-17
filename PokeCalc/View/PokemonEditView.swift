@@ -143,6 +143,12 @@ struct PokemonEditView: View {
                     }
                     .padding()
                     
+                    Text("Total allocated EVs exceed 510, which is illegal in most battle settings. Please keep this in mind.")
+                        .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
+                        .foregroundStyle(.red)
+                        .padding()
+                        .multilineTextAlignment(.center)
+                    
                     Button {
                         let newPokemon = Pokemon(
                             id: pokeID,
