@@ -16,7 +16,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab){
-            PokemonLookupView(selectedTab: $selectedTab, isViewing: true)
+            PokemonLookupView(selectedTab: $selectedTab)
                 .environmentObject(database)
                 .tabItem {
                     Image("ditto")

@@ -16,8 +16,6 @@ struct PokemonLookupView: View {
     @State var isLoaded = false
     
     @Binding var selectedTab: Int
-    
-    @State var isViewing: Bool
 
     var body: some View {
         NavigationStack {
