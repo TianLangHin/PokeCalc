@@ -69,7 +69,7 @@ struct AddPokemonView: View {
                     }
                     
                     NavigationLink {
-                        ItemLookupView(pokeID: 0, itemTF: $item)
+                        ItemLookupView(itemTF: $item)
                             .environmentObject(database)
                     } label: {
                         HStack(spacing: 10) {

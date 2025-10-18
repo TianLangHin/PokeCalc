@@ -38,7 +38,7 @@ struct TeamsView: View {
                         .buttonStyle(BorderlessButtonStyle())
                         
                         NavigationLink {
-                            TeamDetailView(id: team.id)
+                            TeamDetailView(team: team)
                         } label: {
                             Text(team.name)
                         }

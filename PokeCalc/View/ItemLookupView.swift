@@ -13,14 +13,8 @@ struct ItemLookupView: View {
     @EnvironmentObject var database: DatabaseViewModel
 
     @State var itemLookup = ItemsViewModel()
-    @State var pokeID: Int
     @State var isLoaded = false
     @Binding var itemTF: String
-    
-    var pokemon: Pokemon? {
-        database.pokemon.first(where: { $0.id == pokeID })
-    }
-    
 
     var body: some View {
         VStack {

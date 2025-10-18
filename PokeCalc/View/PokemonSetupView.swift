@@ -10,22 +10,19 @@ import Foundation
 
 struct PokemonSetupView: View {
     @EnvironmentObject var database: DatabaseViewModel
-    
     @Environment(\.dismiss) var dismiss
-    
+
     @State var pokemonNumber: Int
     @State var pokemonName: String
     @State var isShowing: Bool = false
     @State var isNotFilled: Bool = false
-    
-    
-    
+
     var body: some View {
         List {
-            ForEach(database.pokemon.filter { $0.pokemonNumber == pokemonNumber }, id:\.self) { pokemon in
+            ForEach(database.pokemon.filter { $0.pokemonNumber == pokemonNumber }, id: \.self) { pokemon in
                 let team = database.teams.filter { $0.pokemonIDs.contains(pokemon.id) }.first!
                 NavigationLink {
-                    PokemonEditView(pokeID: pokemon.id, pokemonSpecies: pokemonName)
+                    PokemonEditView(pokemon: pokemon, pokemonSpecies: pokemonName)
                         .environmentObject(database)
                         .presentationDragIndicator(.visible)
                 } label: {

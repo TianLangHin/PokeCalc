@@ -10,9 +10,10 @@ import SwiftUI
 
 struct PokemonEditView: View {
     @Environment(\.dismiss) var dismiss
-    @State var pokeID: Int
     @EnvironmentObject var database: DatabaseViewModel
-    @State var pokemonSpecies: String
+
+    let pokemon: Pokemon
+    let pokemonSpecies: String
     
     @State var isDismiss: Bool = false
     @State var initialised: Bool = false
@@ -26,28 +27,22 @@ struct PokemonEditView: View {
     @State var move2 = "None"
     @State var move3 = "None"
     @State var move4 = "None"
-    
+
     @State var abilityList: [String] = []
-    
+
     @State var statNames: [String] = ["HP", "ATK", "DEF", "SpATK", "SpDEF", "SPE"]
     @State var stats: [Int] = Array(repeating: 0, count: 6)
-    
+
     @State var moveListName: [String] = []
     @State var pokeType: [String] = []
 
-    
-    var pokemon: Pokemon? {
-        database.pokemon.first(where: { $0.id == pokeID })
-    }
-    
-    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
                     HStack(spacing: 20) {
                         VStack {
-                            PokemonImageView(pokemonNumber: pokemon?.pokemonNumber ?? 0)
+                            PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color.gray, lineWidth: 2)
@@ -64,7 +59,7 @@ struct PokemonEditView: View {
                         
                         VStack {
                             Text("**\(pokemonSpecies.readableFormat())**")
-                            Text("*Pokemon Number: \(String(pokemon?.pokemonNumber ?? 0))*")
+                            Text("*Pokemon Number: \(String(pokemon.pokemonNumber))*")
                                 .padding(.bottom, 35)
                             
                         }
@@ -76,7 +71,7 @@ struct PokemonEditView: View {
                         ItemImageView(item: item)
                         
                         NavigationLink {
-                            ItemLookupView(pokeID: pokeID, itemTF: $item)
+                            ItemLookupView(itemTF: $item)
                                 .environmentObject(database)
                         } label: {
                             Text("item: \(item.readableFormat())")
@@ -151,8 +146,8 @@ struct PokemonEditView: View {
                     
                     Button {
                         let newPokemon = Pokemon(
-                            id: pokeID,
-                            pokemonNumber: pokemon?.pokemonNumber ?? 0,
+                            id: pokemon.id,
+                            pokemonNumber: pokemon.pokemonNumber,
                             item: item,
                             level: level,
                             ability: ability,
@@ -175,15 +170,15 @@ struct PokemonEditView: View {
             .task {
                 if !initialised {
                     await loadBattleData()
-                    move1 = pokemon?.getMove(at: 0) ?? ""
-                    move2 = pokemon?.getMove(at: 1) ?? ""
-                    move3 = pokemon?.getMove(at: 2) ?? ""
-                    move4 = pokemon?.getMove(at: 3) ?? ""
+                    move1 = pokemon.getMove(at: 0)
+                    move2 = pokemon.getMove(at: 1)
+                    move3 = pokemon.getMove(at: 2)
+                    move4 = pokemon.getMove(at: 3)
                     
-                    item = pokemon?.item ?? "None"
-                    level = pokemon?.level ?? 1
-                    ability = pokemon?.ability ?? "No ability"
-                    nature = pokemon?.nature ?? "No personality"
+                    item = pokemon.item
+                    level = pokemon.level
+                    ability = pokemon.ability
+                    nature = pokemon.nature
                     initialised = true
                 }
             }
@@ -196,19 +191,19 @@ struct PokemonEditView: View {
     
     func loadBattleData() async {
         let fetcher = BattleDataFetcher()
-        self.data = await fetcher.fetch(pokemon?.pokemonNumber ?? 0)
+        self.data = await fetcher.fetch(pokemon.pokemonNumber)
         if let data = self.data {
             self.moveListName = data.moves.map{ $0.0 }.sorted()
             self.pokeType = data.types.map{ $0.0 }
             self.abilityList = data.abilities
             
             let obtainedStats = [
-                0: pokemon?.effortValues.hp ?? 0,
-                1: pokemon?.effortValues.attack ?? 0,
-                2: pokemon?.effortValues.defense ?? 0,
-                3: pokemon?.effortValues.specialAttack ?? 0,
-                4: pokemon?.effortValues.specialDefense ?? 0,
-                5: pokemon?.effortValues.speed ?? 0
+                0: pokemon.effortValues.hp,
+                1: pokemon.effortValues.attack,
+                2: pokemon.effortValues.defense,
+                3: pokemon.effortValues.specialAttack,
+                4: pokemon.effortValues.specialDefense,
+                5: pokemon.effortValues.speed
             ]
             
             for (key, value) in obtainedStats {

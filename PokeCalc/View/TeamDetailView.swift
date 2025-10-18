@@ -9,16 +9,13 @@ import SwiftUI
 import Foundation
 
 struct TeamDetailView: View {
-    @State var id: Int
     @EnvironmentObject var database: DatabaseViewModel
     @State var pokeName = PokemonNamesViewModel()
 
-    var team: Team? {
-        database.teams.first(where: { $0.id == id })
-    }
+    let team: Team
 
     var teamPoke: [Pokemon] {
-        (team?.pokemonIDs ?? []).compactMap { id in
+        team.pokemonIDs.compactMap { id in
             database.pokemon.first(where: { $0.id == id })
         }
     }
@@ -26,18 +23,18 @@ struct TeamDetailView: View {
     @State var selectedPokemon = 0
     var body: some View {
         NavigationStack {
-            Text(team?.name ?? "Placeholder")
+            Text(team.name)
                 .font(.largeTitle)
                 .bold()
             NavigationLink {
-                SwipeTeamView(team: team!, selectedPokemon: $selectedPokemon, size: CGFloat(300))
+                SwipeTeamView(team: team, selectedPokemon: $selectedPokemon, size: CGFloat(300))
             } label: {
                 Text("Swipe Team View, selected: \(selectedPokemon)")
             }
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
                     NavigationLink {
-                        PokemonEditView(pokeID: pokemon.id, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())
+                        PokemonEditView(pokemon: pokemon, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())
                             .environmentObject(database)
                     } label: {
                         HStack {
@@ -69,7 +66,7 @@ struct TeamDetailView: View {
                 Button(action: {
                     toggleFavourite()
                 }) {
-                    Image(systemName: team?.isFavourite ?? false ? "heart.fill" : "heart")
+                    Image(systemName: team.isFavourite ? "heart.fill" : "heart")
                         .foregroundColor(.red)
                 }
             }
@@ -80,31 +77,29 @@ struct TeamDetailView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(team?.pokemonIDs.count ?? 0 >= Team.maxPokemon)
-                .foregroundColor(team?.pokemonIDs.count ?? 0 >= Team.maxPokemon ? .gray : .accentColor)
+                .disabled(team.pokemonIDs.count >= Team.maxPokemon)
+                .foregroundColor(team.pokemonIDs.count >= Team.maxPokemon ? .gray : .accentColor)
             }
         }
     }
     
     func toggleFavourite() {
-        if let index = database.teams.firstIndex(where: {$0.id == id}) {
+        if let index = database.teams.firstIndex(where: {$0.id == team.id}) {
             database.teams[index].toggleFavourite()
             database.updateTeam(database.teams[index])
         }
     }
 
     func deletePokemon(at offsets: IndexSet) {
-        if let validTeam = team {
-            var newPokemonIDs = validTeam.pokemonIDs
-            newPokemonIDs.remove(atOffsets: offsets)
-            let newTeam = Team(
-                id: validTeam.id, name: validTeam.name,
-                isFavourite: validTeam.isFavourite, pokemonIDs: newPokemonIDs)
-            database.updateTeam(newTeam)
-            for id in validTeam.pokemonIDs {
-                if !newPokemonIDs.contains(id) {
-                    database.deletePokemon(by: id)
-                }
+        var newPokemonIDs = team.pokemonIDs
+        newPokemonIDs.remove(atOffsets: offsets)
+        let newTeam = Team(
+            id: team.id, name: team.name,
+            isFavourite: team.isFavourite, pokemonIDs: newPokemonIDs)
+        database.updateTeam(newTeam)
+        for id in team.pokemonIDs {
+            if !newPokemonIDs.contains(id) {
+                database.deletePokemon(by: id)
             }
         }
     }
