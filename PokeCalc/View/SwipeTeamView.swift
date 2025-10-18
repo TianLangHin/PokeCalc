@@ -9,16 +9,12 @@ import SwiftUI
 
 struct SwipeTeamView: View {
     @EnvironmentObject var database: DatabaseViewModel
-    @State var team: Team
+    let team: Team
 
-    @Binding var selectedPokemon: Int
+    @Binding var selectedIndex: Int
     @State var offset = CGSize.zero
 
     let size: CGFloat
-
-    var swipeDistance: CGFloat {
-        size / 4
-    }
 
     var swipeGesture: some Gesture {
         DragGesture()
@@ -26,35 +22,49 @@ struct SwipeTeamView: View {
                 offset = CGSize(width: value.translation.width, height: 0)
             }
             .onEnded { _ in
+                let swipeDistance = size / 4
                 if abs(offset.width) > swipeDistance {
-                    selectedPokemon = nextSelectedPokemon()
+                    selectedIndex = nextIndex()
                 }
                 offset = CGSize.zero
             }
     }
 
     var pokemonNumber: Int {
-        database.pokemon.first { $0.id == team.pokemonIDs[selectedPokemon] }?.pokemonNumber ?? 1
+        database.pokemon.first { $0.id == team.pokemonIDs[selectedIndex] }?.pokemonNumber ?? 0
     }
 
     var nextPokemonNumber: Int {
-        database.pokemon.first { $0.id == team.pokemonIDs[nextSelectedPokemon()] }?.pokemonNumber ?? 1
+        database.pokemon.first { $0.id == team.pokemonIDs[nextIndex()] }?.pokemonNumber ?? 0
     }
 
     var body: some View {
         // Does not work if the team is empty.
         ZStack {
             PokemonImageView(pokemonNumber: nextPokemonNumber)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray, lineWidth: 2)
+                        .fill(.white)
+                        .opacity(1)
+                )
+                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
                 .frame(width: size, height: size)
             PokemonImageView(pokemonNumber: pokemonNumber)
-                .background(Rectangle().fill(.white).opacity(1))
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray, lineWidth: 2)
+                        .fill(.white)
+                        .opacity(1)
+                )
+                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
                 .offset(offset)
                 .gesture(swipeGesture)
                 .frame(width: size, height: size)
         }
     }
 
-    func nextSelectedPokemon() -> Int {
-        return (selectedPokemon + 1) % team.pokemonIDs.count
+    func nextIndex() -> Int {
+        return (selectedIndex + 1) % team.pokemonIDs.count
     }
 }

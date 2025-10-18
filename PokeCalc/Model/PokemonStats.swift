@@ -39,4 +39,23 @@ struct PokemonStats: Hashable {
             break
         }
     }
+
+    func getStat(name: String) -> Int {
+        switch name {
+        case "HP":
+            return self.hp
+        case "Atk":
+            return self.attack
+        case "Def":
+            return self.defense
+        case "SpA":
+            return self.specialAttack
+        case "SpD":
+            return self.specialDefense
+        case "Spe":
+            return self.speed
+        default:
+            return 0
+        }
+    }
 }

@@ -71,11 +71,14 @@ class TeamReaderViewModel {
             return nil
         }
         return Pokemon(
-            id: id, pokemonNumber: pokemon.apiID,
-            item: entry.item?.apiGenericFormat() ?? "", level: entry.level,
+            id: id,
+            pokemonNumber: pokemon.apiID,
+            item: entry.item?.apiGenericFormat() ?? "",
+            level: Pokemon.validLevel(entry.level),
             ability: entry.ability?.apiGenericFormat() ?? "",
-            effortValues: entry.effortValues,
-            nature: entry.nature, moves: entry.moves)
+            effortValues: Pokemon.validEVs(entry.effortValues),
+            nature: entry.nature,
+            moves: Pokemon.validMoves(entry.moves.map { $0.apiGenericFormat() }))
     }
 
     struct PokemonEntry: Hashable {

@@ -26,11 +26,6 @@ struct TeamDetailView: View {
             Text(team.name)
                 .font(.largeTitle)
                 .bold()
-            NavigationLink {
-                SwipeTeamView(team: team, selectedPokemon: $selectedPokemon, size: CGFloat(300))
-            } label: {
-                Text("Swipe Team View, selected: \(selectedPokemon)")
-            }
             List {
                 ForEach(teamPoke, id: \.self) { pokemon in
                     NavigationLink {

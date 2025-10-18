@@ -33,6 +33,14 @@ struct ContentView: View {
                 Text("Teams")
             }
             .tag(1)
+
+            CalculationView()
+                .environmentObject(database)
+                .tabItem {
+                    Image(systemName: "equal.square.fill")
+                    Text("Calculator")
+                }
+                .tag(2)
             
             VStack {
                 Text("Successful Initialisation: \(database.dbController.success)")
@@ -62,7 +70,7 @@ struct ContentView: View {
                 Image(systemName: "info.circle")
                 Text("Debug")
             }
-            .tag(2)
+            .tag(3)
         }
     }
 }
