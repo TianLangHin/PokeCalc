@@ -23,12 +23,12 @@ struct PokemonLookupView: View {
         NavigationStack {
             VStack {
                 if isLoaded {
-                    TextField((isViewing ? "Look for an existing Pokémon setup..." : "Look for a Pokémon..."), text: $namesLookup.queryString)
+                    TextField((team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon..."), text: $namesLookup.queryString)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .padding()
                     
-                    if isViewing {
+                    if team == nil {
                         Button(action: {
                             selectedTab = 1
                         }) {
@@ -38,16 +38,7 @@ struct PokemonLookupView: View {
                     
                     List {
                         ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
-                            if isViewing {
-                                NavigationLink(destination:
-                                    PokemonSetupView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name)
-                                        .environmentObject(database)) {
-                                            HStack {
-                                                PokemonImageView(pokemonNumber: pokemonData.apiID)
-                                                Text(pokemonData.name.readableFormat())
-                                            }
-                                }
-                            } else {
+                            if let team = self.team {
                                 NavigationLink(destination: AddPokemonView(isDismiss: $isDismiss, pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
                                     .environmentObject(database)) {
                                         HStack {
@@ -55,6 +46,15 @@ struct PokemonLookupView: View {
                                             Text(pokemonData.name.readableFormat())
                                         }
                                     }
+                            } else {
+                                NavigationLink(destination:
+                                    PokemonSetupView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name)
+                                        .environmentObject(database)) {
+                                            HStack {
+                                                PokemonImageView(pokemonNumber: pokemonData.apiID)
+                                                Text(pokemonData.name.readableFormat())
+                                            }
+                                        }
                             }
                         }
                     }

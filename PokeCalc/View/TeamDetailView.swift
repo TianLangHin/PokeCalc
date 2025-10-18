@@ -82,7 +82,7 @@ struct TeamDetailView: View {
             }
         }
     }
-    
+
     func toggleFavourite() {
         if let index = database.teams.firstIndex(where: {$0.id == team.id}) {
             database.teams[index].toggleFavourite()

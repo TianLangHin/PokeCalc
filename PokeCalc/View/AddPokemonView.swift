@@ -15,7 +15,7 @@ struct AddPokemonView: View {
     
     @State var pokemonNumber: Int
     @State var pokemonName: String
-    @State var team: Team?
+    @State var team: Team
     
     @State var data: BattleDataFetcher.BattleData?
     @State var item = ""
@@ -150,12 +150,10 @@ struct AddPokemonView: View {
                             effortValues: PokemonStats(hp: stats[0], attack: stats[1], defense: stats[2], specialAttack: stats[3], specialDefense: stats[4], speed: stats[5]),
                             nature: nature,
                             moves: [move1, move2, move3, move4].filter({ !$0.isEmpty && $0 != "None"}))
-                        
-                        if var team = team {
-                            team.addPokemon(id: pokemon.id)
-                            addToTeamAlert = !database.updateTeam(team)
-                        }
+                        team.addPokemon(id: pokemon.id)
+                        addToTeamAlert = !database.updateTeam(team)
                         addPokemonAlert = !database.addPokemon(pokemon)
+                        
                         isDismiss = true
                         dismiss()
                     } label: {
@@ -206,11 +204,9 @@ struct AddPokemonView: View {
     @ViewBuilder
     func typeDisplay(pos: Int, types: [String]) -> some View {
         let type = getType(pos: pos, types: types)
-        
         if type != nil {
             let bgColour = getBackgroundColour(type: type ?? "")
             let fgColour = getForegroundColour(type: type ?? "")
-
             Text("\(typeText(pos: pos, empty: "unknown", types: types))")
                 .padding(pos == 0 ? 5 : getType(pos: 1, types: types) == nil ? 0 : 5)
                 .background(bgColour)
@@ -229,7 +225,7 @@ struct AddPokemonView: View {
             return nil
         }
     }
-
+    
     
     func getBackgroundColour(type: String) -> Color {
         switch type {
@@ -273,7 +269,7 @@ struct AddPokemonView: View {
             return Color.clear
         }
     }
-
+    
     // Colours for the foreground text when put against the above background color,
     // designed to maximise contrast with the background colour.
     func getForegroundColour(type: String) -> Color {

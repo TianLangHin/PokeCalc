@@ -51,11 +51,6 @@ struct TeamsView: View {
                     }
                 }
             }
-            .searchable(text: $searchQuery, prompt: "Search for Team")
-            .popover(isPresented: $showPopup) {
-                AddTeamView()
-                    .environmentObject(database)
-            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing){
@@ -67,7 +62,11 @@ struct TeamsView: View {
                 
             }
         }
-                
+        .searchable(text: $searchQuery, prompt: "Search for Team")
+        .popover(isPresented: $showPopup) {
+            AddTeamView()
+                .environmentObject(database)
+        }
     }
     
     
