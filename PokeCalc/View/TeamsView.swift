@@ -51,6 +51,7 @@ struct TeamsView: View {
                     }
                 }
             }
+            .searchable(text: $searchQuery, prompt: "Search for Team")
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing){
@@ -62,7 +63,6 @@ struct TeamsView: View {
                 
             }
         }
-        .searchable(text: $searchQuery, prompt: "Search for Team")
         .popover(isPresented: $showPopup) {
             AddTeamView()
                 .environmentObject(database)

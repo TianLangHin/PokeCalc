@@ -73,7 +73,7 @@ struct TeamDetailView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
-                    PokemonLookupView(team: team, selectedTab: .constant(1), isViewing: false)
+                    PokemonLookupView(team: team, selectedTab: .constant(1))
                 } label: {
                     Image(systemName: "plus")
                 }

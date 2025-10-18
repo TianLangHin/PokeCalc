@@ -153,9 +153,11 @@ struct AddPokemonView: View {
                         team.addPokemon(id: pokemon.id)
                         addToTeamAlert = !database.updateTeam(team)
                         addPokemonAlert = !database.addPokemon(pokemon)
-                        
-                        isDismiss = true
                         dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            isDismiss = true
+                        }
+                        
                     } label: {
                         Text("Add Pokémon")
                     }
