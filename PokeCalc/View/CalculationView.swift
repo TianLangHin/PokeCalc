@@ -23,7 +23,7 @@ struct CalculationView: View {
     @State var battleData1: BattleDataFetcher.BattleData? = nil
     @State var battleData2: BattleDataFetcher.BattleData? = nil
 
-    @State var selectedMove: Int = 0
+    @State var selectedMove: Int? = nil
 
     @State var damage: Double = 0
 
@@ -221,7 +221,7 @@ struct CalculationView: View {
 
     func reset() {
         damage = 0.0
-        selectedMove = 0
+        selectedMove = nil
     }
 }
 

@@ -39,122 +39,127 @@ struct AddPokemonView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    HStack(spacing: 20) {
-                        VStack {
-                            PokemonImageView(pokemonNumber: pokemonNumber)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray, lineWidth: 2)
-                                        .fill(Color.white)
-                                )
-                                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
-
-                            HStack {
-                                typeDisplay(pos: 0, types: pokeType)
-                                typeDisplay(pos: 1, types: pokeType)
+            VStack {
+                ScrollView {
+                    VStack {
+                        HStack(spacing: 20) {
+                            VStack {
+                                PokemonImageView(pokemonNumber: pokemonNumber)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.gray, lineWidth: 2)
+                                            .fill(Color.white)
+                                    )
+                                    .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
+                                
+                                HStack {
+                                    typeDisplay(pos: 0, types: pokeType)
+                                    typeDisplay(pos: 1, types: pokeType)
+                                }
+                            }
+                            
+                            VStack {
+                                Text("**\(pokemonName.readableFormat())**")
+                                Text("*Pokemon Number: \(pokemonNumber)*")
+                                    .padding(.bottom, 35)
                             }
                         }
-
-                        VStack {
-                            Text("**\(pokemonName.readableFormat())**")
-                            Text("*Pokemon Number: \(pokemonNumber)*")
-                                .padding(.bottom, 35)
-                        }
-                    }
-
-                    NavigationLink {
-                        ItemLookupView(selectedItem: $item)
-                            .environmentObject(database)
-                    } label: {
-                        HStack(spacing: 10) {
-                            ItemImageView(item: item)
-                            Text("Item: \(item == "" ? "Select an Item" : item.readableFormat())")
-                        }
-                    }
-                    .padding()
-
-                    VStack {
-                        Text("Level:")
-                            .font(.title3)
-                            .bold()
-                        TextField("Enter the Pokemon Level", value: $level, format: .number)
-                            .textFieldStyle(.roundedBorder)
-                            .padding(.bottom)
-                            .padding(.horizontal)
-                    }
-                    .padding(.bottom)
-
-                    VStack {
-                        Text("Ability and Nature")
-                            .font(.title3)
-                            .bold()
-                        PickerView(selection: $ability, listOfItems: data?.abilities ?? [], pickerTitle: "Ability:")
-                        PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
-                    }
-                    .padding(.bottom, 20)
-
-                    VStack {
-                        Text("Move List:")
-                            .font(.title3)
-                            .bold()
-                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move1, currentMoveNum: 1)
-                            .environmentObject(database)
-                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move2, currentMoveNum: 2)
-                            .environmentObject(database)
-                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move3, currentMoveNum: 3)
-                            .environmentObject(database)
-                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move4, currentMoveNum: 4)
-                            .environmentObject(database)
-                    }
-                    .padding()
-
-                    Text("Effort Values")
-                        .font(.title3)
-                        .bold()
-
-                    Grid {
-                        ForEach(self.stats.indices, id: \.self) { index in
-                            GridRow {
-                                StatGaugeView(stat: self.statNames[index], value: self.$stats[index])
+                        
+                        NavigationLink {
+                            ItemLookupView(selectedItem: $item)
+                                .environmentObject(database)
+                        } label: {
+                            HStack(spacing: 10) {
+                                ItemImageView(item: item)
+                                Text("Item: \(item == "" ? "Select an Item" : item.readableFormat())")
                             }
                         }
-                    }
-                    .padding()
-
-                    Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
-                        .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
-                        .foregroundStyle(.red)
                         .padding()
-                        .multilineTextAlignment(.center)
-
-                    Spacer()
-
-                    Button {
-                        savePokemon()
-                        dismiss()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            dismissParent = true
+                        
+                        VStack {
+                            Text("Level:")
+                                .font(.title3)
+                                .bold()
+                            TextField("Enter the Pokemon Level", value: $level, format: .number)
+                                .textFieldStyle(.roundedBorder)
+                                .padding(.bottom)
+                                .padding(.horizontal)
                         }
-                    } label: {
-                        Text("Add Pokémon")
+                        .padding(.bottom)
+                        
+                        VStack {
+                            Text("Ability and Nature")
+                                .font(.title3)
+                                .bold()
+                            PickerView(selection: $ability, listOfItems: data?.abilities ?? [], pickerTitle: "Ability:")
+                            PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
+                        }
+                        .padding(.bottom, 20)
+                        
+                        VStack {
+                            Text("Move List:")
+                                .font(.title3)
+                                .bold()
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move1, currentMoveNum: 1)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move2, currentMoveNum: 2)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move3, currentMoveNum: 3)
+                                .environmentObject(database)
+                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move4, currentMoveNum: 4)
+                                .environmentObject(database)
+                        }
+                        .padding()
+                        
+                        Text("Effort Values")
+                            .font(.title3)
+                            .bold()
+                        
+                        Grid {
+                            ForEach(self.stats.indices, id: \.self) { index in
+                                GridRow {
+                                    StatGaugeView(stat: self.statNames[index], value: self.$stats[index])
+                                }
+                            }
+                        }
+                        .padding()
+                        
+                        Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
+                            .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
+                            .foregroundStyle(.red)
+                            .padding()
+                            .multilineTextAlignment(.center)
+                        
+                        Spacer()
+                        
                     }
-                    .padding(.vertical, 20)
-                    .frame(width: 150)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-        
+                    .padding(.top, 30)
                 }
-                .padding(.top, 30)
-                .alert("Could not add Pokémon to the team. Please try again later.", isPresented: $isAlerting) {
-                    Button("OK", role: .cancel) {}
+
+                Divider()
+
+                Button {
+                    savePokemon()
+                    dismiss()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dismissParent = true
+                    }
+                } label: {
+                    Text("Add Pokémon")
                 }
+                .frame(width: 150)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
             }
-            .task {
-                await loadBattleData()
-            }
+            .padding()
+        }
+        .task {
+            await loadBattleData()
+        }
+        .alert("Could not add Pokémon to the team. Please try again later.", isPresented: $isAlerting) {
+            Button("OK", role: .cancel) {}
         }
     }
     
