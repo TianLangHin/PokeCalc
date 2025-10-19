@@ -10,11 +10,14 @@ import Foundation
 
 struct TeamDetailView: View {
     @EnvironmentObject var database: DatabaseViewModel
-    @State var pokeName = PokemonNamesViewModel()
+    @State var pokemonNames = PokemonNamesViewModel()
+
+    @State var alertText = ""
+    @State var isAlerting = false
 
     let team: Team
 
-    var teamPoke: [Pokemon] {
+    var teamPokemon: [Pokemon] {
         team.pokemonIDs.compactMap { id in
             database.pokemon.first(where: { $0.id == id })
         }
@@ -27,9 +30,10 @@ struct TeamDetailView: View {
                 .font(.largeTitle)
                 .bold()
             List {
-                ForEach(teamPoke, id: \.self) { pokemon in
+                ForEach(teamPokemon, id: \.self) { pokemon in
+                    let species = pokemonNames.getName(apiId: pokemon.pokemonNumber).readableFormat()
                     NavigationLink {
-                        PokemonEditView(pokemon: pokemon, pokemonSpecies: (pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())
+                        PokemonEditView(pokemon: pokemon, pokemonSpecies: species)
                             .environmentObject(database)
                     } label: {
                         HStack {
@@ -41,7 +45,7 @@ struct TeamDetailView: View {
                             
                             PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
                             VStack {
-                                Text("Species: \((pokeName.getName(apiId: pokemon.pokemonNumber)).readableFormat())")
+                                Text("Species: \(species)")
                                 Text("Pokemon Number: \(pokemon.pokemonNumber)")
                             }
                         }
@@ -52,7 +56,7 @@ struct TeamDetailView: View {
             .onAppear {
                 Task {
                     database.refresh()
-                    await pokeName.loadNames()
+                    await pokemonNames.loadNames()
                 }
             }
         }
@@ -76,12 +80,19 @@ struct TeamDetailView: View {
                 .foregroundColor(team.pokemonIDs.count >= Team.maxPokemon ? .gray : .accentColor)
             }
         }
+        .alert(alertText, isPresented: $isAlerting) {
+            Button("OK", role: .cancel) {}
+        }
     }
 
     func toggleFavourite() {
         if let index = database.teams.firstIndex(where: {$0.id == team.id}) {
             database.teams[index].toggleFavourite()
-            database.updateTeam(database.teams[index])
+            let success = database.updateTeam(database.teams[index])
+            if !success {
+                alertText = "Could not update team favourite status. Please try again later."
+                isAlerting = true
+            }
         }
     }
 
@@ -91,10 +102,19 @@ struct TeamDetailView: View {
         let newTeam = Team(
             id: team.id, name: team.name,
             isFavourite: team.isFavourite, pokemonIDs: newPokemonIDs)
-        database.updateTeam(newTeam)
-        for id in team.pokemonIDs {
-            if !newPokemonIDs.contains(id) {
-                database.deletePokemon(by: id)
+        let updateSuccess = database.updateTeam(newTeam)
+        if !updateSuccess {
+            alertText = "Could not update team with Pokémon removals. Please try again later."
+            isAlerting = true
+        } else {
+            for id in team.pokemonIDs {
+                if !newPokemonIDs.contains(id) {
+                    let success = database.deletePokemon(by: id)
+                    if !success {
+                        alertText = "Pokémon deletion unsuccessful. Please try again later."
+                        isAlerting = true
+                    }
+                }
             }
         }
     }

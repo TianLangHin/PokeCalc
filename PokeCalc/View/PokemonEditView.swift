@@ -31,7 +31,7 @@ struct PokemonEditView: View {
 
     @State var abilityList: [String] = []
 
-    @State var statNames: [String] = ["HP", "Atk", "Def", "SpA", "SpE", "Spe"]
+    @State var statNames: [String] = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
     @State var stats: [Int] = Array(repeating: 0, count: 6)
 
     @State var moveListName: [String] = []

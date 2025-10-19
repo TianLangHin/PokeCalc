@@ -10,41 +10,37 @@ import SwiftUI
 struct AddTeamView: View {
     @EnvironmentObject var database: DatabaseViewModel
     @Environment(\.dismiss) private var dismiss
-    @State var teamName: String = ""
-    @State var createError: Bool = false
-    
+
+    @State var teamName = ""
+    @State var errorText = ""
+    @State var createError = false
+
     var body: some View {
         VStack {
             Text("Add New Team")
                 .font(.title3)
                 .bold()
-            
+
             TextField("Enter Team Name...", text: $teamName)
                 .padding()
-            
-            Text("Error creating team. Please try again.")
+
+            Text(errorText)
                 .opacity(createError ? 1 : 0)
                 .foregroundStyle(Color.red)
-            
+
             HStack(spacing: 10) {
-                Button(action: {
+                Button {
                     dismiss()
-                }) {
+                } label: {
                     Text("Cancel")
                 }
-                
-                Button(action: {
-                    createError = true
-                }) {
-                    Text("Test Error")
-                }
-                
-                Button(action: {
+
+                Button {
                     addTeam()
                     if !createError {
                         dismiss()
                     }
-                }) {
+                } label: {
                     Text("Submit")
                 }
             }
@@ -53,12 +49,22 @@ struct AddTeamView: View {
     }
     
     func addTeam() {
-        // Obtain a unique team identifier and set this as the team ID. If a team name is not specified, then the team name corresponds to its ID.
+        // Obtain a unique team identifier and set this as the team ID.
+        // If a team name is not specified, then the team name corresponds to its ID.
         let teamID = Team.getUniqueId()
         if teamName.isEmpty {
             teamName = "Team \(teamID)"
         }
-        let newTeam = Team(id: teamID, name: teamName, isFavourite: false, pokemonIDs: [])
-        createError = !database.addTeam(newTeam)
+        if database.teams.contains(where: { $0.name == teamName }) {
+            errorText = "This team name already exists. Please enter another name."
+            createError = true
+        } else {
+            let newTeam = Team(id: teamID, name: teamName, isFavourite: false, pokemonIDs: [])
+            let success = database.addTeam(newTeam)
+            if !success {
+                errorText = "Could not add team to the database. Please try again later."
+                createError = true
+            }
+        }
     }
 }

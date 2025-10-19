@@ -10,12 +10,15 @@ import Foundation
 
 struct TeamsView: View {
     @EnvironmentObject var database: DatabaseViewModel
+
     @State var searchQuery: String = ""
     @State var newName: String = ""
     @State var showPopup: Bool = false
     @State var showAlert: Bool = false
-    @State var deleteSuccess: Bool = false
-    
+
+    @State var alertText = ""
+    @State var isAlerting = false
+
     var filteredTeam: [Team] {
         if searchQuery.isEmpty {
             return database.teams
@@ -68,23 +71,38 @@ struct TeamsView: View {
             AddTeamView()
                 .environmentObject(database)
         }
+        .alert(alertText, isPresented: $isAlerting) {
+            Button("OK", role: .cancel) {}
+        }
     }
-    
-    
+
     func deleteTeam(at offsets: IndexSet) {
         let teamsToDelete = offsets.map { filteredTeam[$0] }
         for team in teamsToDelete {
-            deleteSuccess = database.deleteTeam(by: team.id)
-            for id in team.pokemonIDs {
-                database.deletePokemon(by: id)
+            let deleteSuccess = database.deleteTeam(by: team.id)
+            if !deleteSuccess {
+                alertText = "Could not remove team. Please try again later."
+                isAlerting = true
+            } else {
+                for id in team.pokemonIDs {
+                    let success = database.deletePokemon(by: id)
+                    if !success {
+                        alertText = "Team deletion unsuccessful. Please try again later."
+                        isAlerting = true
+                    }
+                }
             }
         }
     }
-    
+
     func toggleFavourite(id: Int) {
         if let index = database.teams.firstIndex(where: {$0.id == id}) {
             database.teams[index].toggleFavourite()
-            database.updateTeam(database.teams[index])
+            let success = database.updateTeam(database.teams[index])
+            if !success {
+                alertText = "Could not update team favourite status. Please try again later."
+                isAlerting = true
+            }
         }
     }
 
