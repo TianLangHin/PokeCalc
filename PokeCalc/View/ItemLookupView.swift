@@ -14,7 +14,7 @@ struct ItemLookupView: View {
 
     @State var itemLookup = ItemsViewModel()
     @State var isLoaded = false
-    @Binding var itemTF: String
+    @Binding var selectedItem: String
 
     var body: some View {
         VStack {
@@ -26,7 +26,7 @@ struct ItemLookupView: View {
                 List {
                     ForEach(itemLookup.filteredResults, id: \.self) { itemData in
                         Button(action: {
-                            itemTF = itemData
+                            selectedItem = itemData
                             dismiss()
                         }) {
                             HStack {

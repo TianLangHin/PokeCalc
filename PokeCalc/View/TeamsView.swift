@@ -20,10 +20,11 @@ struct TeamsView: View {
         if searchQuery.isEmpty {
             return database.teams
         }
-        return database.filter(searchText: searchQuery)
+        return database.teams.filter { team in
+            team.name.lowercased().contains(searchQuery.lowercased())
+        }
     }
-    
-    
+
     var body: some View {
         NavigationStack {
             List {

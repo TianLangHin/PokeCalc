@@ -11,13 +11,14 @@ import SwiftUI
 struct PokemonEditView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: DatabaseViewModel
+    let battleDataFetcher = BattleDataFetcher()
 
     let pokemon: Pokemon
     let pokemonSpecies: String
-    
+
     @State var isDismiss: Bool = false
     @State var initialised: Bool = false
-    
+
     @State var data: BattleDataFetcher.BattleData?
     @State var item = "None"
     @State var level = 100
@@ -30,11 +31,13 @@ struct PokemonEditView: View {
 
     @State var abilityList: [String] = []
 
-    @State var statNames: [String] = ["HP", "ATK", "DEF", "SpATK", "SpDEF", "SPE"]
+    @State var statNames: [String] = ["HP", "Atk", "Def", "SpA", "SpE", "Spe"]
     @State var stats: [Int] = Array(repeating: 0, count: 6)
 
     @State var moveListName: [String] = []
-    @State var pokeType: [String] = []
+    @State var pokemonTypes: [String] = []
+
+    @State var isAlerting: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -49,86 +52,72 @@ struct PokemonEditView: View {
                                         .fill(Color.white)
                                 )
                                 .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
-                            
-                            
+
                             HStack {
-                                typeDisplay(pos: 0, types: pokeType)
-                                typeDisplay(pos: 1, types: pokeType)
+                                typeDisplay(pos: 0, types: pokemonTypes)
+                                typeDisplay(pos: 1, types: pokemonTypes)
                             }
                         }
-                        
+
                         VStack {
-                            Text("**\(pokemonSpecies.readableFormat())**")
-                            Text("*Pokemon Number: \(String(pokemon.pokemonNumber))*")
+                            Text("\(pokemonSpecies.readableFormat())")
+                                .bold()
+                            Text("Pokemon Number: \(String(pokemon.pokemonNumber))")
                                 .padding(.bottom, 35)
-                            
+                                .italic()
                         }
                     }
-                    
-                    
-                    
+
                     HStack {
                         ItemImageView(item: item)
-                        
                         NavigationLink {
-                            ItemLookupView(itemTF: $item)
+                            ItemLookupView(selectedItem: $item)
                                 .environmentObject(database)
                         } label: {
                             Text("item: \(item.readableFormat())")
                         }
                     }
-                    
-                    
+
                     VStack {
-                        Text("**Level:**")
+                        Text("Level:")
                             .font(.title3)
-                        
+                            .bold()
                         TextField("Enter the Pokemon Level", value: $level, format: .number)
                             .textFieldStyle(.roundedBorder)
                             .padding(.bottom)
                             .padding(.horizontal)
                     }
                     .padding(.bottom)
-                    
+
                     VStack {
-                        Text("**Ability and Nature**")
+                        Text("Ability and Nature")
                             .font(.title3)
-                        
+                            .bold()
                         if let data = self.data {
                             PickerView(selection: $ability, listOfItems: data.abilities, pickerTitle: "Ability:")
                         }
-                        
-                        
                         PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
                     }
                     .padding(.bottom, 20)
-                    
-                    
-                    
-                    
-                    
-                    
-                    // This is to work with preset team for now
+
                     VStack {
-                        Text("**Move List:**")
+                        Text("Move List:")
                             .font(.title3)
-                        
-                        if self.data != nil {
-                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move1, currentMoveNum: 1)
-                                .environmentObject(database)
-                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move2, currentMoveNum: 2)
-                                .environmentObject(database)
-                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move3, currentMoveNum: 3)
-                                .environmentObject(database)
-                            MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move4, currentMoveNum: 4)
-                                .environmentObject(database)
-                        }
+                            .bold()
+                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move1, currentMoveNum: 1)
+                            .environmentObject(database)
+                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move2, currentMoveNum: 2)
+                            .environmentObject(database)
+                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move3, currentMoveNum: 3)
+                            .environmentObject(database)
+                        MoveChooserView(pokeID: 0, moveListName: moveListName, move: $move4, currentMoveNum: 4)
+                            .environmentObject(database)
                     }
                     .padding()
-                    
-                    Text("**EVs**")
+
+                    Text("Effort Values")
                         .font(.title3)
-                    
+                        .bold()
                     Grid {
                         ForEach(self.stats.indices, id: \.self) { index in
                             GridRow {
@@ -137,28 +126,19 @@ struct PokemonEditView: View {
                         }
                     }
                     .padding()
-                    
-                    Text("Total allocated EVs exceed 510, which is illegal in most battle settings. Please keep this in mind.")
+
+                    Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
                         .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
                         .foregroundStyle(.red)
                         .padding()
                         .multilineTextAlignment(.center)
-                    
+
                     Button {
-                        let newPokemon = Pokemon(
-                            id: pokemon.id,
-                            pokemonNumber: pokemon.pokemonNumber,
-                            item: item,
-                            level: level,
-                            ability: ability,
-                            effortValues: PokemonStats(hp: stats[0], attack: stats[1], defense: stats[2], specialAttack: stats[3], specialDefense: stats[4], speed: stats[5]),
-                            nature: nature,
-                            moves: [move1, move2, move3, move4].filter({ !$0.isEmpty && $0 != "None"}))
-                        let _ = database.updatePokemon(newPokemon)
+                        updatePokemon()
                         isDismiss = true
                         dismiss()
                     } label: {
-                        Text("Modify Pokémon")
+                        Text("Update Pokémon")
                     }
                     .padding(.vertical, 20)
                     .frame(width: 150)
@@ -174,7 +154,6 @@ struct PokemonEditView: View {
                     move2 = pokemon.getMove(at: 1)
                     move3 = pokemon.getMove(at: 2)
                     move4 = pokemon.getMove(at: 3)
-                    
                     item = pokemon.item
                     level = pokemon.level
                     ability = pokemon.ability
@@ -182,54 +161,20 @@ struct PokemonEditView: View {
                     initialised = true
                 }
             }
-        }
-    }
-    
-    
-    
-    
-    
-    func loadBattleData() async {
-        let fetcher = BattleDataFetcher()
-        self.data = await fetcher.fetch(pokemon.pokemonNumber)
-        if let data = self.data {
-            self.moveListName = data.moves.map{ $0.0 }.sorted()
-            self.pokeType = data.types.map{ $0.0 }
-            self.abilityList = data.abilities
-            
-            let obtainedStats = [
-                0: pokemon.effortValues.hp,
-                1: pokemon.effortValues.attack,
-                2: pokemon.effortValues.defense,
-                3: pokemon.effortValues.specialAttack,
-                4: pokemon.effortValues.specialDefense,
-                5: pokemon.effortValues.speed
-            ]
-            
-            for (key, value) in obtainedStats {
-                if value != 0 {
-                    self.stats[key] = value
-                }
+            .alert("Could not modify the Pokémon. Please try again later.", isPresented: $isAlerting) {
+                Button("OK", role: .cancel) {}
             }
         }
     }
-    
-    
-    
-    func typeText(pos: Int, empty: String, types: [String]) -> String {
-        let type = getType(pos: pos, types: types)
-        return type?.capitalized ?? empty
-    }
-    
+
     @ViewBuilder
     func typeDisplay(pos: Int, types: [String]) -> some View {
-        let type = getType(pos: pos, types: types)
-        
-        if type != nil {
-            let bgColour = getBackgroundColour(type: type ?? "")
-            let fgColour = getForegroundColour(type: type ?? "")
+        if let type = getType(pos: pos, types: types) {
+            let bgColour = Color.getBackgroundColour(type: type)
+            let fgColour = Color.getForegroundColour(type: type)
+            let typeText = type.capitalized
 
-            Text("\(typeText(pos: pos, empty: "unknown", types: types))")
+            Text(typeText)
                 .padding(pos == 0 ? 5 : getType(pos: 1, types: types) == nil ? 0 : 5)
                 .background(bgColour)
                 .foregroundColor(fgColour)
@@ -237,9 +182,8 @@ struct PokemonEditView: View {
         } else {
             EmptyView()
         }
-   }
-    
-    
+    }
+
     func getType(pos: Int, types: [String]) -> String? {
         if types.count > pos {
             return types[pos]
@@ -248,92 +192,44 @@ struct PokemonEditView: View {
         }
     }
 
-    
-    func getBackgroundColour(type: String) -> Color {
-        switch type {
-        case "normal":
-            return Color(hex: 0xA8A77A)
-        case "fighting":
-            return Color(hex: 0xC22E28)
-        case "flying":
-            return Color(hex: 0xA98FF3)
-        case "poison":
-            return Color(hex: 0xA33EA1)
-        case "ground":
-            return Color(hex: 0xE2BF65)
-        case "rock":
-            return Color(hex: 0xB6A136)
-        case "bug":
-            return Color(hex: 0xA6B91A)
-        case "steel":
-            return Color(hex: 0xB7B7CE)
-        case "ghost":
-            return Color(hex: 0x735797)
-        case "fire":
-            return Color(hex: 0xEE8130)
-        case "water":
-            return Color(hex: 0x6390F0)
-        case "grass":
-            return Color(hex: 0x7AC74C)
-        case "electric":
-            return Color(hex: 0xF7D02C)
-        case "psychic":
-            return Color(hex: 0xF95587)
-        case "ice":
-            return Color(hex: 0x96D9D6)
-        case "dragon":
-            return Color(hex: 0x6F35FC)
-        case "dark":
-            return Color(hex: 0x705746)
-        case "fairy":
-            return Color(hex: 0xD685AD)
-        default:
-            return Color.clear
+    func loadBattleData() async {
+        self.data = await battleDataFetcher.fetch(pokemon.pokemonNumber)
+        if let data = self.data {
+            self.moveListName = data.moves.map { $0.0 }.sorted()
+            self.pokemonTypes = data.types.map { $0.0 }
+            self.abilityList = data.abilities
+
+            let baseStats = [
+                pokemon.effortValues.hp,
+                pokemon.effortValues.attack,
+                pokemon.effortValues.defense,
+                pokemon.effortValues.specialAttack,
+                pokemon.effortValues.specialDefense,
+                pokemon.effortValues.speed
+            ]
+
+            for (key, value) in baseStats.enumerated() {
+                self.stats[key] = value
+            }
         }
     }
 
-    // Colours for the foreground text when put against the above background color,
-    // designed to maximise contrast with the background colour.
-    func getForegroundColour(type: String) -> Color {
-        switch type {
-        case "normal":
-            return Color.white
-        case "fighting":
-            return Color.white
-        case "flying":
-            return Color.black
-        case "poison":
-            return Color.white
-        case "ground":
-            return Color.black
-        case "rock":
-            return Color.white
-        case "bug":
-            return Color.white
-        case "steel":
-            return Color.black
-        case "ghost":
-            return Color.white
-        case "fire":
-            return Color.black
-        case "water":
-            return Color.black
-        case "grass":
-            return Color.black
-        case "electric":
-            return Color.black
-        case "psychic":
-            return Color.white
-        case "ice":
-            return Color.black
-        case "dragon":
-            return Color.white
-        case "dark":
-            return Color.white
-        case "fairy":
-            return Color.black
-        default:
-            return Color.clear
+    func updatePokemon() {
+        let evs = PokemonStats(
+            hp: stats[0], attack: stats[1], defense: stats[2],
+            specialAttack: stats[3], specialDefense: stats[4], speed: stats[5])
+        let newPokemon = Pokemon(
+            id: pokemon.id,
+            pokemonNumber: pokemon.pokemonNumber,
+            item: item,
+            level: level,
+            ability: ability,
+            effortValues: evs,
+            nature: nature,
+            moves: [move1, move2, move3, move4].filter({ !$0.isEmpty && $0 != "None" }))
+        let success = database.updatePokemon(newPokemon)
+        if !success {
+            isAlerting = true
         }
     }
 }

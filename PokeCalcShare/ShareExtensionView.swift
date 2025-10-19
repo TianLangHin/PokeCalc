@@ -17,6 +17,7 @@ struct ShareExtensionView: View {
 
     @State var alertText = ""
     @State var isAlerting = false
+    @State var isClosing = true
 
     init(text: String) {
         self.text = text
@@ -31,6 +32,7 @@ struct ShareExtensionView: View {
                         .bold()
                         .padding()
                     TextField("Name...", text: $teamText)
+                        .autocorrectionDisabled()
                         .textFieldStyle(.roundedBorder)
                 }
                 .padding()
@@ -38,34 +40,7 @@ struct ShareExtensionView: View {
                     .lineLimit(10...20)
                     .textFieldStyle(.roundedBorder)
                 Button {
-                    let team = teamReader.readTeam(text)
-                    var pokemonList: [Pokemon] = []
-                    for pokemonEntry in team {
-                        let newID = Pokemon.getUniqueId()
-                        if let pokemon = teamReader.newValidPokemon(from: pokemonEntry, nameData: nameLookup.filteredResults, id: newID) {
-                            pokemonList.append(pokemon)
-                        } else {
-                            print(pokemonEntry.species)
-                        }
-                    }
-                    let newTeam = Team(
-                        id: Team.getUniqueId(), name: teamText,
-                        isFavourite: false, pokemonIDs: pokemonList.map { $0.id })
-                    for pokemon in pokemonList {
-                        let success = database.addPokemon(pokemon)
-                        if !success {
-                            alertText = "Could not add Pokémon!"
-                            isAlerting = true
-                        }
-                    }
-                    let success = database.addTeam(newTeam)
-                    if !success {
-                        alertText = "Could not add team!"
-                        isAlerting = true
-                    } else {
-                        alertText = "Team added!"
-                        isAlerting = true
-                    }
+                    saveTeam()
                 } label: {
                     Text("Save Team!")
                         .frame(maxWidth: .infinity)
@@ -86,9 +61,51 @@ struct ShareExtensionView: View {
             .alert(alertText, isPresented: $isAlerting) {
                 Button("OK", role: .cancel) {
                     WidgetCenter.shared.reloadAllTimelines()
-                    self.close()
+                    if isClosing {
+                        self.close()
+                    }
                 }
             }
+        }
+    }
+
+    func saveTeam() {
+        isAlerting = true
+        isClosing = true
+        let team = teamReader.readTeam(text)
+        let teamName = teamText.trimmingCharacters(in: .whitespaces)
+        if database.teams.contains(where: { $0.name == teamName }) {
+            alertText = "Team \(teamName) already exists."
+            isClosing = false
+            return
+        } else if teamName == "" {
+            alertText = "Please enter a valid team name!"
+            isClosing = false
+            return
+        }
+        var pokemonList: [Pokemon] = []
+        for pokemonEntry in team {
+            let newID = Pokemon.getUniqueId()
+            if let pokemon = teamReader.newValidPokemon(from: pokemonEntry, nameData: nameLookup.filteredResults, id: newID) {
+                pokemonList.append(pokemon)
+            } else {
+                alertText = "Pokémon entry \(pokemonEntry.species) could not be loaded. Please check for invalid values."
+                return
+            }
+        }
+        let newTeam = Team(id: Team.getUniqueId(), name: teamName, isFavourite: false, pokemonIDs: pokemonList.map { $0.id })
+        for pokemon in pokemonList {
+            let success = database.addPokemon(pokemon)
+            if !success {
+                alertText = "Could not add Pokémon to the database. Please try again later."
+                return
+            }
+        }
+        let success = database.addTeam(newTeam)
+        if !success {
+            alertText = "Could not add team to the database. Please try again later."
+        } else {
+            alertText = "Team added!"
         }
     }
 

@@ -70,16 +70,4 @@ class DatabaseViewModel: ObservableObject {
         Team.resetIdCounter(to: teamId + 1)
         WidgetCenter.shared.reloadAllTimelines()
     }
-    
-    
-    
-    func filter(searchText: String) -> [Team] {
-        var filteredTeam: [Team] = []
-        for team in self.teams {
-            if (team.name.lowercased().contains(searchText.lowercased())) == true {
-                filteredTeam.append(team)
-            }
-        }
-        return filteredTeam
-    }
 }

@@ -37,7 +37,7 @@ struct PokemonLookupView: View {
                     List {
                         ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
                             if let team = self.team {
-                                NavigationLink(destination: AddPokemonView(isDismiss: $isDismiss, pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
+                                NavigationLink(destination: AddPokemonView(dismissParent: $isDismiss, pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
                                     .environmentObject(database)) {
                                         HStack {
                                             PokemonImageView(pokemonNumber: pokemonData.apiID)
