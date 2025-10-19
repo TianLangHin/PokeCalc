@@ -9,7 +9,6 @@ import SwiftUI
 
 @Observable
 class CalculationViewModel {
-    let battleDataFetcher = BattleDataFetcher()
 
     func calculateDamage(
         move: String,
