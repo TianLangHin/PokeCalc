@@ -25,6 +25,12 @@ extension String {
             return "indeedee-male"
         } else if baseString.hasPrefix("indeedee-f") {
             return "indeedee-female"
+        } else if baseString.hasPrefix("arceus") {
+            return "arceus"
+        } else if baseString.hasPrefix("necrozma-dusk-mane") {
+            return "necrozma-dusk"
+        } else if baseString.hasPrefix("necrozma-dawn-mane") {
+            return "necrozma-dawn"
         } else {
             return baseString
         }
