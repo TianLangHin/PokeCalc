@@ -37,7 +37,7 @@ struct ContentView: View {
             CalculationView()
                 .environmentObject(database)
                 .tabItem {
-                    Image(systemName: "equal.square.fill")
+                    Image("battle")
                     Text("Calculator")
                 }
                 .tag(2)
