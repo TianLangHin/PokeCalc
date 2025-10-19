@@ -16,7 +16,7 @@ class CalculationViewModel {
         attacker: Pokemon,
         attackerData: BattleDataFetcher.BattleData,
         defender: Pokemon,
-        defenderData: BattleDataFetcher.BattleData) async -> Double? {
+        defenderData: BattleDataFetcher.BattleData) async -> (Double, Effectiveness)? {
 
         guard let moveData = await getMoveData(move: move) else {
             return nil
@@ -25,7 +25,7 @@ class CalculationViewModel {
             return nil
         }
         guard let basePower = moveData.power else {
-            return 0
+            return (0, .immune)
         }
 
         let attackerStats = battleStats(pokemon: attacker, pokemonData: attackerData)
@@ -44,7 +44,7 @@ class CalculationViewModel {
         let finalDamage = Double(baseDamage) * (stab ? 1.5 : 1) * (typeEffect?.multiplier() ?? 1)
         let opponentHP = defenderStats.hp
 
-        return min(finalDamage / Double(opponentHP), 1.0)
+        return (min(finalDamage / Double(opponentHP), 1.0), typeEffect ?? .neutral)
     }
 
     func battleStats(pokemon: Pokemon, pokemonData: BattleDataFetcher.BattleData) -> PokemonStats {

@@ -26,6 +26,7 @@ struct CalculationView: View {
     @State var selectedMove: Int? = nil
 
     @State var damage: Double = 0
+    @State var typeEffect: CalculationViewModel.Effectiveness = .immune
 
     var selectedPokemon1: Pokemon? {
         return team1 == nil ? nil : database.pokemon.first { pokemon in
@@ -53,7 +54,10 @@ struct CalculationView: View {
                 EmptyView()
             } currentValueLabel: {
                 let remainingHP = Int(100 * (1 - damage))
-                Text("Remaining HP: \(remainingHP)%")
+                VStack {
+                    Text("Remaining HP: \(remainingHP)%")
+                    typeEffectView()
+                }
             }
             .tint(damage < 0.5 ? .green : damage < 0.75 ? .yellow : .red)
             .padding()
@@ -202,6 +206,29 @@ struct CalculationView: View {
         }
     }
 
+    func typeEffectView() -> some View {
+        switch typeEffect {
+        case .neutral:
+            Text("It was neutral effectiveness.")
+                .foregroundStyle(.black)
+        case .weak:
+            Text("It was super-effective!")
+                .foregroundStyle(.green)
+        case .resist:
+            Text("It was not very effective...")
+                .foregroundStyle(.orange)
+        case .doubleWeak:
+            Text("It was very super-effective!")
+                .foregroundStyle(.green)
+        case .doubleResist:
+            Text("It was resisted heavily...")
+                .foregroundStyle(.orange)
+        case .immune:
+            Text("No damage was taken!")
+                .foregroundStyle(.black)
+        }
+    }
+
     func calculateDamage(move: String) {
         if let attackerPokemon = selectedPokemon1,
             let defenderPokemon = selectedPokemon2,
@@ -209,14 +236,17 @@ struct CalculationView: View {
             let defenderData = battleData2 {
 
             Task {
-                let newDamage = await calculator.calculateDamage(
+                if let (newDamage, typeModifier) = await calculator.calculateDamage(
                     move: move,
                     attacker: attackerPokemon,
                     attackerData: attackerData,
                     defender: defenderPokemon,
-                    defenderData: defenderData) ?? 0.0
-                withAnimation {
-                    damage = newDamage
+                    defenderData: defenderData) {
+
+                    withAnimation {
+                        damage = newDamage
+                        typeEffect = typeModifier
+                    }
                 }
             }
         }
@@ -225,6 +255,7 @@ struct CalculationView: View {
     func reset() {
         withAnimation {
             damage = 0.0
+            typeEffect = .immune
         }
         selectedMove = nil
     }
