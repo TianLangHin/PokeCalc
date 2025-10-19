@@ -21,10 +21,12 @@ struct PokemonLookupView: View {
         NavigationStack {
             VStack {
                 if isLoaded {
+                    /*
                     TextField((team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon..."), text: $namesLookup.queryString)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .padding()
+                    */
                     
                     if team == nil {
                         Button(action: {
@@ -56,6 +58,7 @@ struct PokemonLookupView: View {
                             }
                         }
                     }
+                    .searchable(text: $namesLookup.queryString, prompt: team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon...")
                 } else {
                     ProgressView()
                 }

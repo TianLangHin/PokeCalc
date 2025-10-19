@@ -189,9 +189,9 @@ struct CalculationView: View {
                     calculateDamage(move: moves[index])
                 } label: {
                     Text(moves[index].readableFormat())
-                        .border(selectedMove == index ? .black : .white)
                 }
                 .buttonStyle(.borderedProminent)
+                .border(selectedMove == index ? .black : .white, width: 5)
             } else {
                 Text("No move to select!")
                     .border(selectedMove == index ? .black : .white)
@@ -203,24 +203,29 @@ struct CalculationView: View {
     }
 
     func calculateDamage(move: String) {
-        Task {
-            if let attackerPokemon = selectedPokemon1,
-               let defenderPokemon = selectedPokemon2,
-               let attackerData = battleData1,
-               let defenderData = battleData2 {
+        if let attackerPokemon = selectedPokemon1,
+            let defenderPokemon = selectedPokemon2,
+            let attackerData = battleData1,
+            let defenderData = battleData2 {
 
-                damage = await calculator.calculateDamage(
+            Task {
+                let newDamage = await calculator.calculateDamage(
                     move: move,
                     attacker: attackerPokemon,
                     attackerData: attackerData,
                     defender: defenderPokemon,
                     defenderData: defenderData) ?? 0.0
+                withAnimation {
+                    damage = newDamage
+                }
             }
         }
     }
 
     func reset() {
-        damage = 0.0
+        withAnimation {
+            damage = 0.0
+        }
         selectedMove = nil
     }
 }
