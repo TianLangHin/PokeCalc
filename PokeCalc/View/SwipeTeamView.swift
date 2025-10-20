@@ -20,11 +20,19 @@ struct SwipeTeamView: View {
         DragGesture()
             .onChanged { value in
                 offset = CGSize(width: value.translation.width, height: 0)
+                let bottomIndex = offset.width < 0 ? nextIndex() : previousIndex()
+                bottomPokemonNumber = database.pokemon.first { $0.id == team.pokemonIDs[bottomIndex] }?.pokemonNumber ?? 0
             }
             .onEnded { _ in
                 let swipeDistance = size / 4
-                if abs(offset.width) > swipeDistance {
+                if offset.width < -swipeDistance {
+                    // Swiping the top item to the left indicates forward progression.
+                    // Here, the offset is in the negative x-direction.
                     selectedIndex = nextIndex()
+                } else if offset.width > swipeDistance {
+                    // Swiping the top item to the right indicates backward navigation.
+                    // Here, the offset is in the positive x-direction.
+                    selectedIndex = previousIndex()
                 }
                 offset = CGSize.zero
             }
@@ -34,14 +42,12 @@ struct SwipeTeamView: View {
         database.pokemon.first { $0.id == team.pokemonIDs[selectedIndex] }?.pokemonNumber ?? 0
     }
 
-    var nextPokemonNumber: Int {
-        database.pokemon.first { $0.id == team.pokemonIDs[nextIndex()] }?.pokemonNumber ?? 0
-    }
+    @State var bottomPokemonNumber: Int = 0
 
     var body: some View {
         // Does not work if the team is empty.
         ZStack {
-            PokemonImageView(pokemonNumber: nextPokemonNumber)
+            PokemonImageView(pokemonNumber: bottomPokemonNumber)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 2)
@@ -66,5 +72,9 @@ struct SwipeTeamView: View {
 
     func nextIndex() -> Int {
         return (selectedIndex + 1) % team.pokemonIDs.count
+    }
+
+    func previousIndex() -> Int {
+        return (selectedIndex + team.pokemonIDs.count - 1) % team.pokemonIDs.count
     }
 }
