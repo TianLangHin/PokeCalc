@@ -55,12 +55,12 @@ struct ContentView: View {
             
             
             OnboardView(isSheet: false, selectedTab: $selectedTab)
-            .id(selectedTab == 3 ? "guide-\(UUID())" : "guide-static")
-            .tabItem {
-                Image("guideIcon")
-                Text("Guide")
-            }
-            .tag(3)
+                .id(selectedTab == 3 ? "guide-\(UUID())" : "guide-static")
+                .tabItem {
+                    Image("guideIcon")
+                    Text("Guide")
+                }
+                .tag(3)
         }
         .onAppear {
             if !hasLaunchedBefore {
