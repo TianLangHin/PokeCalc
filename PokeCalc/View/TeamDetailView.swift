@@ -29,7 +29,7 @@ struct TeamDetailView: View {
             Text(team.name)
                 .font(.largeTitle)
                 .bold()
-            if (teamPokemon.isEmpty) {
+            if teamPokemon.isEmpty {
                 Spacer()
                 Text("This team has no Pokémon. Start adding some with the + button!")
                     .font(.headline)
