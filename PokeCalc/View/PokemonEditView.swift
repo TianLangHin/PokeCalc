@@ -53,32 +53,31 @@ struct PokemonEditView: View {
                                             .fill(Color.white)
                                     )
                                     .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
-                                
+                                    .padding()
                                 HStack {
                                     typeDisplay(pos: 0, types: pokemonTypes)
                                     typeDisplay(pos: 1, types: pokemonTypes)
                                 }
                             }
-                            
                             VStack {
-                                Text("\(pokemonSpecies.readableFormat())")
+                                Spacer()
+                                Text(pokemonSpecies.readableFormat())
+                                    .font(.title2)
                                     .bold()
-                                Text("Pokemon Number: \(String(pokemon.pokemonNumber))")
-                                    .padding(.bottom, 35)
-                                    .italic()
+                                Spacer()
                             }
                         }
-                        
+ 
                         HStack {
                             ItemImageView(item: item)
                             NavigationLink {
                                 ItemLookupView(selectedItem: $item)
                                     .environmentObject(database)
                             } label: {
-                                Text("item: \(item.readableFormat())")
+                                Text("Item: \(item.readableFormat())")
                             }
                         }
-                        
+ 
                         VStack {
                             Text("Level:")
                                 .font(.title3)
@@ -89,7 +88,7 @@ struct PokemonEditView: View {
                                 .padding(.horizontal)
                         }
                         .padding(.bottom)
-                        
+ 
                         VStack {
                             Text("Ability and Nature")
                                 .font(.title3)
@@ -100,7 +99,7 @@ struct PokemonEditView: View {
                             PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
                         }
                         .padding(.bottom, 20)
-                        
+ 
                         VStack {
                             Text("Move List:")
                                 .font(.title3)
@@ -115,7 +114,7 @@ struct PokemonEditView: View {
                                 .environmentObject(database)
                         }
                         .padding()
-                        
+ 
                         Text("Effort Values")
                             .font(.title3)
                             .bold()
@@ -127,13 +126,12 @@ struct PokemonEditView: View {
                             }
                         }
                         .padding()
-                        
+ 
                         Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
                             .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
                             .foregroundStyle(.red)
                             .padding()
                             .multilineTextAlignment(.center)
-                        
                     }
                 }
 

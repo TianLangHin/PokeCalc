@@ -51,20 +51,21 @@ struct AddPokemonView: View {
                                             .fill(Color.white)
                                     )
                                     .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
-                                
+                                    .padding()
                                 HStack {
                                     typeDisplay(pos: 0, types: pokeType)
                                     typeDisplay(pos: 1, types: pokeType)
                                 }
                             }
-                            
                             VStack {
-                                Text("**\(pokemonName.readableFormat())**")
-                                Text("*Pokemon Number: \(pokemonNumber)*")
-                                    .padding(.bottom, 35)
+                                Spacer()
+                                Text(pokemonName.readableFormat())
+                                    .font(.title2)
+                                    .bold()
+                                Spacer()
                             }
                         }
-                        
+
                         NavigationLink {
                             ItemLookupView(selectedItem: $item)
                                 .environmentObject(database)
@@ -75,7 +76,7 @@ struct AddPokemonView: View {
                             }
                         }
                         .padding()
-                        
+
                         VStack {
                             Text("Level:")
                                 .font(.title3)
@@ -86,7 +87,7 @@ struct AddPokemonView: View {
                                 .padding(.horizontal)
                         }
                         .padding(.bottom)
-                        
+
                         VStack {
                             Text("Ability and Nature")
                                 .font(.title3)
@@ -95,7 +96,7 @@ struct AddPokemonView: View {
                             PickerView(selection: $nature, listOfItems: POKEMON_NATURES, pickerTitle: "Nature:")
                         }
                         .padding(.bottom, 20)
-                        
+
                         VStack {
                             Text("Move List:")
                                 .font(.title3)
@@ -110,11 +111,11 @@ struct AddPokemonView: View {
                                 .environmentObject(database)
                         }
                         .padding()
-                        
+ 
                         Text("Effort Values")
                             .font(.title3)
                             .bold()
-                        
+ 
                         Grid {
                             ForEach(self.stats.indices, id: \.self) { index in
                                 GridRow {
@@ -123,15 +124,15 @@ struct AddPokemonView: View {
                             }
                         }
                         .padding()
-                        
+ 
                         Text("Total allocated EVs exceed 510, which is illegal in regular battle settings.")
                             .opacity(self.stats.reduce(0, +) <= 510 ? 0 : 1)
                             .foregroundStyle(.red)
                             .padding()
                             .multilineTextAlignment(.center)
-                        
+ 
                         Spacer()
-                        
+ 
                     }
                     .padding(.top, 30)
                 }
@@ -162,7 +163,7 @@ struct AddPokemonView: View {
             Button("OK", role: .cancel) {}
         }
     }
-    
+
     func loadBattleData() async {
         let fetcher = BattleDataFetcher()
         self.data = await fetcher.fetch(self.pokemonNumber)
@@ -177,13 +178,12 @@ struct AddPokemonView: View {
             self.abilityList = data.abilities
         }
     }
-    
-    
+
     func typeText(pos: Int, empty: String, types: [String]) -> String {
         let type = getType(pos: pos, types: types)
         return type?.capitalized ?? empty
     }
-    
+ 
     @ViewBuilder
     func typeDisplay(pos: Int, types: [String]) -> some View {
         let type = getType(pos: pos, types: types)
