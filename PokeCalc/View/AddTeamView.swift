@@ -22,6 +22,7 @@ struct AddTeamView: View {
                 .bold()
 
             TextField("Enter Team Name...", text: $teamName)
+                .autocorrectionDisabled()
                 .padding()
 
             Text(errorText)
@@ -34,6 +35,7 @@ struct AddTeamView: View {
                 } label: {
                     Text("Cancel")
                 }
+                .padding()
 
                 Button {
                     addTeam()
@@ -43,6 +45,8 @@ struct AddTeamView: View {
                 } label: {
                     Text("Submit")
                 }
+                .padding()
+                .buttonStyle(.borderedProminent)
             }
         }
         .padding()
@@ -51,6 +55,7 @@ struct AddTeamView: View {
     func addTeam() {
         // Obtain a unique team identifier and set this as the team ID.
         // If a team name is not specified, then the team name corresponds to its ID.
+        createError = false
         let teamID = Team.getUniqueId()
         if teamName.isEmpty {
             teamName = "Team \(teamID)"

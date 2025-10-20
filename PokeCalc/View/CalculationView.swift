@@ -148,8 +148,8 @@ struct CalculationView: View {
             reset()
         }
         .onAppear {
-            team1 = database.teams.first
-            team2 = database.teams.first
+            team1 = database.teams.filter { !$0.pokemonIDs.isEmpty }.first
+            team2 = database.teams.filter { !$0.pokemonIDs.isEmpty }.first
         }
     }
 
