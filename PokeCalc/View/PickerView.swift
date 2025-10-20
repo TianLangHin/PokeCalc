@@ -12,19 +12,27 @@ struct PickerView: View {
     @Binding var selection: String
     var listOfItems: [String]
     var pickerTitle: String
-    
-    
+
     var body: some View {
         HStack {
             Text("\(pickerTitle)")
-            
             Spacer()
-            Picker(selection: $selection, label: Text("")) {
-                ForEach(listOfItems.sorted(), id: \.self) { item in
-                    Text(item.readableFormat()).tag(item)
+            Menu {
+                Picker(selection: $selection, label: Text("")) {
+                    ForEach(listOfItems.sorted(), id: \.self) { item in
+                        Text(item.readableFormat()).tag(item)
+                    }
+                }
+                .pickerStyle(.automatic)
+            } label: {
+                HStack {
+                    Text(selection.readableFormat())
+                    VStack {
+                        Image(systemName: "chevron.up")
+                        Image(systemName: "chevron.down")
+                    }
                 }
             }
-            .pickerStyle(.automatic)
         }
         .padding(20)
         .padding(.horizontal, 5)

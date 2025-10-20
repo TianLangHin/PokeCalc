@@ -50,12 +50,8 @@ struct TeamDetailView: View {
                                     Spacer()
                                     ItemImageView(item: item)
                                 }
-                                
                                 PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
-                                VStack {
-                                    Text("Species: \(species)")
-                                    Text("Pokemon Number: \(pokemon.pokemonNumber)")
-                                }
+                                Text(species)
                             }
                         }
                     }
