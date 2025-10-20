@@ -130,6 +130,7 @@ struct CalculationView: View {
                     moveButton(index: 3)
                 }
             }
+            .padding()
         }
         .task {
             await pokemonNames.loadNames()
@@ -193,9 +194,18 @@ struct CalculationView: View {
                     calculateDamage(move: moves[index])
                 } label: {
                     Text(moves[index].readableFormat())
+                    
                 }
-                .buttonStyle(.borderedProminent)
-                .border(selectedMove == index ? .black : .white, width: 5)
+                .padding()
+                .font(.headline)
+                .frame(width: 175)
+                .background(selectedMove == index ? .black : .white)
+                .foregroundStyle(selectedMove == index ? .white : .black)
+                .cornerRadius(12)
+                .overlay(
+                    selectedMove == index ? AnyView(EmptyView()) : AnyView(RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.black, lineWidth: 1))
+                )
             } else {
                 Text("No move to select!")
                     .border(selectedMove == index ? .black : .white)
