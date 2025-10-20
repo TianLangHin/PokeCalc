@@ -30,32 +30,41 @@ struct TeamsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(filteredTeam, id: \.id) { team in
-                    HStack {
-                        Button (action: {
-                            toggleFavourite(id: team.id)
-                        }) {
-                            Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
-                                .foregroundStyle(.red)
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        
-                        NavigationLink {
-                            TeamDetailView(team: team)
-                        } label: {
-                            Text(team.name)
+            if database.teams.isEmpty {
+                Spacer()
+                Text("There are no teams currently stored. Start adding some with the + button!")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                Spacer()
+            } else {
+                List {
+                    ForEach(filteredTeam, id: \.id) { team in
+                        HStack {
+                            Button (action: {
+                                toggleFavourite(id: team.id)
+                            }) {
+                                Image(systemName: (team.isFavourite ? "heart.fill" : "heart"))
+                                    .foregroundStyle(.red)
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            
+                            NavigationLink {
+                                TeamDetailView(team: team)
+                            } label: {
+                                Text(team.name)
+                            }
                         }
                     }
+                    .onDelete(perform: deleteTeam)
                 }
-                .onDelete(perform: deleteTeam)
-                .onAppear {
-                    Task {
-                        database.refresh()
-                    }
-                }
+                .searchable(text: $searchQuery, prompt: "Search for Team")
             }
-            .searchable(text: $searchQuery, prompt: "Search for Team")
+        }
+        .onAppear {
+            Task {
+                database.refresh()
+            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing){
@@ -63,8 +72,8 @@ struct TeamsView: View {
                     showPopup = true
                 }) {
                     Image(systemName: "plus")
+                        .foregroundColor(Color.accentColor)
                 }
-                
             }
         }
         .popover(isPresented: $showPopup) {

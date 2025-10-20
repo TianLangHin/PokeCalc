@@ -29,35 +29,44 @@ struct TeamDetailView: View {
             Text(team.name)
                 .font(.largeTitle)
                 .bold()
-            List {
-                ForEach(teamPokemon, id: \.self) { pokemon in
-                    let species = pokemonNames.getName(apiId: pokemon.pokemonNumber).readableFormat()
-                    NavigationLink {
-                        PokemonEditView(pokemon: pokemon, pokemonSpecies: species)
-                            .environmentObject(database)
-                    } label: {
-                        HStack {
-                            let item = pokemon.item.apiGenericFormat()
-                            VStack {
-                                Spacer()
-                                ItemImageView(item: item)
-                            }
-                            
-                            PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
-                            VStack {
-                                Text("Species: \(species)")
-                                Text("Pokemon Number: \(pokemon.pokemonNumber)")
+            if (teamPokemon.isEmpty) {
+                Spacer()
+                Text("This team has no Pokémon. Start adding some with the + button!")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                Spacer()
+            } else {
+                List {
+                    ForEach(teamPokemon, id: \.self) { pokemon in
+                        let species = pokemonNames.getName(apiId: pokemon.pokemonNumber).readableFormat()
+                        NavigationLink {
+                            PokemonEditView(pokemon: pokemon, pokemonSpecies: species)
+                                .environmentObject(database)
+                        } label: {
+                            HStack {
+                                let item = pokemon.item.apiGenericFormat()
+                                VStack {
+                                    Spacer()
+                                    ItemImageView(item: item)
+                                }
+                                
+                                PokemonImageView(pokemonNumber: pokemon.pokemonNumber)
+                                VStack {
+                                    Text("Species: \(species)")
+                                    Text("Pokemon Number: \(pokemon.pokemonNumber)")
+                                }
                             }
                         }
                     }
+                    .onDelete(perform: deletePokemon)
                 }
-                .onDelete(perform: deletePokemon)
             }
-            .onAppear {
-                Task {
-                    database.refresh()
-                    await pokemonNames.loadNames()
-                }
+        }
+        .onAppear {
+            Task {
+                database.refresh()
+                await pokemonNames.loadNames()
             }
         }
         .toolbar {
