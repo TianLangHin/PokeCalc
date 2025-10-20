@@ -14,7 +14,7 @@ struct SwipeTeamView: View {
     @Binding var selectedIndex: Int
     @State var offset = CGSize.zero
 
-    let size: CGFloat
+    let swipeDistance: CGFloat
 
     var swipeGesture: some Gesture {
         DragGesture()
@@ -24,7 +24,6 @@ struct SwipeTeamView: View {
                 bottomPokemonNumber = database.pokemon.first { $0.id == team.pokemonIDs[bottomIndex] }?.pokemonNumber ?? 0
             }
             .onEnded { _ in
-                let swipeDistance = size / 4
                 if offset.width < -swipeDistance {
                     // Swiping the top item to the left indicates forward progression.
                     // Here, the offset is in the negative x-direction.
@@ -54,8 +53,7 @@ struct SwipeTeamView: View {
                         .fill(.white)
                         .opacity(1)
                 )
-                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
-                .frame(width: size, height: size)
+                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 3, y: 3)
             PokemonImageView(pokemonNumber: pokemonNumber)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
@@ -63,10 +61,9 @@ struct SwipeTeamView: View {
                         .fill(.white)
                         .opacity(1)
                 )
-                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 5, y: 5)
+                .shadow(color: Color.gray.opacity(0.7), radius: 5, x: 3, y: 3)
                 .offset(offset)
                 .gesture(swipeGesture)
-                .frame(width: size, height: size)
         }
     }
 

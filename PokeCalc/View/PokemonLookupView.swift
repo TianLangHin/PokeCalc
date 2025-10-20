@@ -10,55 +10,60 @@ import SwiftUI
 struct PokemonLookupView: View {
     @EnvironmentObject var database: DatabaseViewModel
     @Environment(\.dismiss) var dismiss
+
     @State var isDismiss: Bool = false
     @State var namesLookup = PokemonNamesViewModel()
     @State var team: Team?
     @State var isLoaded = false
-    
+
     @Binding var selectedTab: Int
 
     var body: some View {
         NavigationStack {
             VStack {
                 if isLoaded {
-                    /*
-                    TextField((team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon..."), text: $namesLookup.queryString)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .padding()
-                    */
-                    
                     if team == nil {
-                        Button(action: {
+                        Button {
                             selectedTab = 1
-                        }) {
-                            Text("Add a Pokemon to a Team NOW!")
+                        } label: {
+                            Text("Click here to add new Pokémon sets instead!")
                         }
                     }
-                    
+
                     List {
                         ForEach(namesLookup.filteredResults, id: \.self) { pokemonData in
                             if let team = self.team {
-                                NavigationLink(destination: AddPokemonView(dismissParent: $isDismiss, pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name, team: team)
-                                    .environmentObject(database)) {
-                                        HStack {
-                                            PokemonImageView(pokemonNumber: pokemonData.apiID)
-                                            Text(pokemonData.name.readableFormat())
-                                        }
+                                let destView = AddPokemonView(
+                                    dismissParent: $isDismiss,
+                                    pokemonNumber: pokemonData.apiID,
+                                    pokemonName: pokemonData.name,
+                                    team: team)
+                                    .environmentObject(database)
+
+                                NavigationLink(destination: destView) {
+                                    HStack {
+                                        PokemonImageView(pokemonNumber: pokemonData.apiID)
+                                        Text(pokemonData.name.readableFormat())
                                     }
+                                }
                             } else {
-                                NavigationLink(destination:
-                                    PokemonSetupView(pokemonNumber: pokemonData.apiID, pokemonName: pokemonData.name)
-                                        .environmentObject(database)) {
-                                            HStack {
-                                                PokemonImageView(pokemonNumber: pokemonData.apiID)
-                                                Text(pokemonData.name.readableFormat())
-                                            }
-                                        }
+                                let destView = PokemonSetupView(
+                                    pokemonNumber: pokemonData.apiID,
+                                    pokemonName: pokemonData.name)
+                                    .environmentObject(database)
+
+                                NavigationLink(destination: destView) {
+                                    HStack {
+                                        PokemonImageView(pokemonNumber: pokemonData.apiID)
+                                        Text(pokemonData.name.readableFormat())
+                                    }
+                                }
                             }
                         }
                     }
-                    .searchable(text: $namesLookup.queryString, prompt: team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon...")
+                    .searchable(
+                        text: $namesLookup.queryString,
+                        prompt: team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon...")
                 } else {
                     ProgressView()
                 }
@@ -75,8 +80,7 @@ struct PokemonLookupView: View {
             }
         }
     }
-    
-    
+
     func dismissSelf() {
         isDismiss = false
         dismiss()

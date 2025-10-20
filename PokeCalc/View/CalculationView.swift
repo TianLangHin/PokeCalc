@@ -61,8 +61,8 @@ struct CalculationView: View {
             }
             .tint(damage < 0.5 ? .green : damage < 0.75 ? .yellow : .red)
             .padding()
-            
-            Grid() {
+
+            Grid(horizontalSpacing: CGFloat(50)) {
                 GridRow {
                     let teamBinding1 = Binding<Team?>(get: {
                         return self.team1
@@ -117,11 +117,11 @@ struct CalculationView: View {
                 }
             }
             .padding()
-            
+
             Button {
                 teamSwap()
             } label: {
-                Text("Swap")
+                Text("Swap Teams")
             }
         }
         .task {
@@ -152,7 +152,7 @@ struct CalculationView: View {
             team2 = database.teams.first
         }
     }
-    
+
     func teamSwap() {
         let tempTeam = team1
         team1 = team2
@@ -164,20 +164,9 @@ struct CalculationView: View {
 
     func teamPicker(teamBinding: Binding<Team?>, firstTeam: Bool) -> some View {
         VStack {
-            if let validTeam = teamBinding.wrappedValue {
-                if firstTeam {
-                    SwipeTeamView(team: validTeam, selectedIndex: $pokemon1, size: 200)
-                } else {
-                    SwipeTeamView(team: validTeam, selectedIndex: $pokemon2, size: 200)
-                }
-
-            } else {
-                PokemonImageView(pokemonNumber: 0)
-                    .frame(width: 200, height: 200)
-            }
-            
-            HStack {
-                Text("Select Team:")
+            VStack {
+                Text(firstTeam ? "Attacking Team:" : "Defending Team:")
+                    .bold()
                 Picker(selection: teamBinding, label: EmptyView()) {
                     ForEach(database.teams.filter { !$0.pokemonIDs.isEmpty }) { team in
                         HStack {
@@ -186,6 +175,15 @@ struct CalculationView: View {
                         .tag(team)
                     }
                 }
+            }
+            if let validTeam = teamBinding.wrappedValue {
+                if firstTeam {
+                    SwipeTeamView(team: validTeam, selectedIndex: $pokemon1, swipeDistance: CGFloat(50))
+                } else {
+                    SwipeTeamView(team: validTeam, selectedIndex: $pokemon2, swipeDistance: CGFloat(50))
+                }
+            } else {
+                PokemonImageView(pokemonNumber: 0)
             }
         }
     }
@@ -199,7 +197,6 @@ struct CalculationView: View {
                     calculateDamage(move: moves[index])
                 } label: {
                     Text(moves[index].readableFormat())
-                    
                 }
                 .padding()
                 .font(.headline)
@@ -208,8 +205,10 @@ struct CalculationView: View {
                 .foregroundStyle(selectedMove == index ? .white : Color.accentColor)
                 .cornerRadius(12)
                 .overlay(
-                    selectedMove == index ? AnyView(EmptyView()) : AnyView(RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.accentColor, lineWidth: 1))
+                    selectedMove == index
+                        ? AnyView(EmptyView())
+                        : AnyView(RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.accentColor, lineWidth: 1))
                 )
             } else {
                 Text("No Move")

@@ -15,18 +15,22 @@ struct ContentView: View {
     
 
     var body: some View {
-        TabView(selection: $selectedTab){
-            PokemonLookupView(selectedTab: $selectedTab)
-                .environmentObject(database)
-                .tabItem {
-                    Image("ditto")
-                    Text("Pokémon")
-                }
-                .tag(0)
-            
+        TabView(selection: $selectedTab) {
+            NavigationStack {
+                PokemonLookupView(selectedTab: $selectedTab)
+                    .environmentObject(database)
+                    .navigationTitle("Pokémon Lookup")
+            }
+            .tabItem {
+                Image("ditto")
+                Text("Pokémon")
+            }
+            .tag(0)
+
             NavigationStack {
                 TeamsView()
                     .environmentObject(database)
+                    .navigationTitle("Teams")
             }
             .tabItem {
                 Image("pokemon")
@@ -34,13 +38,16 @@ struct ContentView: View {
             }
             .tag(1)
 
-            CalculationView()
-                .environmentObject(database)
-                .tabItem {
-                    Image("battle")
-                    Text("Calculator")
-                }
-                .tag(2)
+            NavigationStack {
+                CalculationView()
+                    .environmentObject(database)
+                    .navigationTitle("Damage Calculation")
+            }
+            .tabItem {
+                Image("battle")
+                Text("Calculator")
+            }
+            .tag(2)
             
             VStack {
                 Text("Successful Initialisation: \(database.dbController.success)")
