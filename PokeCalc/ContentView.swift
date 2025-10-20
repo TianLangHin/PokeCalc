@@ -13,6 +13,10 @@ struct ContentView: View {
     @State var alerting = false
     @State var selectedTab: Int = 0
     
+    
+    @AppStorage("hasLaunchedBefore") var hasLaunchedBefore: Bool = false
+    @State private var firstLaunch: Bool = false
+    
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -49,36 +53,26 @@ struct ContentView: View {
             }
             .tag(2)
             
-            VStack {
-                Text("Successful Initialisation: \(database.dbController.success)")
-                Text("Pokémon")
-                List {
-                    ForEach(database.pokemon, id: \.self) { pokemon in
-                        Text("\(pokemon)")
-                    }
-                }
-                Text("Teams")
-                List {
-                    ForEach(database.teams, id: \.self) { team in
-                        Text("\(team)")
-                    }
-                }
-                Button {
-                    alerting = !database.clear()
-                } label: {
-                    Text("Clear")
-                }
-            }
-            .padding()
-            .alert("", isPresented: $alerting) {
-                Button("Dismiss", role: .cancel) {}
-            }
+            
+            OnboardView(isSheet: false, selectedTab: $selectedTab)
+            .id(selectedTab == 3 ? "guide-\(UUID())" : "guide-static")
             .tabItem {
-                Image(systemName: "info.circle")
-                Text("Debug")
+                Image("guideIcon")
+                Text("Guide")
             }
             .tag(3)
         }
+        .onAppear {
+            if !hasLaunchedBefore {
+                firstLaunch = true
+                hasLaunchedBefore = true
+            }
+        }
+        .sheet(isPresented: $firstLaunch) {
+            OnboardView(isSheet: true, selectedTab: $selectedTab)
+                .presentationDragIndicator(.visible) 
+        }
+
     }
 }
 
