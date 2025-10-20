@@ -46,6 +46,7 @@ struct ContentView: View {
                 CalculationView()
                     .environmentObject(database)
                     .navigationTitle("Damage Calculation")
+                    .id(UUID())
             }
             .tabItem {
                 Image("battle")
