@@ -61,6 +61,7 @@ struct CalculationView: View {
             }
             .tint(damage < 0.5 ? .green : damage < 0.75 ? .yellow : .red)
             .padding()
+            
             Grid() {
                 GridRow {
                     let teamBinding1 = Binding<Team?>(get: {
@@ -93,33 +94,18 @@ struct CalculationView: View {
                     }
                 }
                 GridRow {
-                    if let validPokemon1 = selectedPokemon1,
-                       let validBattleData1 = battleData1 {
-                        let stats = calculator.battleStats(pokemon: validPokemon1, pokemonData: validBattleData1)
-                        Text("\(stats)")
-                    } else {
-                        Text("No stats")
+                    if let validPokemon1 = selectedPokemon1, let validBattleData1 = battleData1 {
+                        let stats1 = calculator.battleStats(pokemon: validPokemon1, pokemonData: validBattleData1)
+                        BattleDataGridView(stats: stats1)
                     }
-                    if let validPokemon2 = selectedPokemon2,
-                       let validBattleData2 = battleData2 {
-                        let stats = calculator.battleStats(pokemon: validPokemon2, pokemonData: validBattleData2)
-                        Text("\(stats)")
-                    } else {
-                        Text("No stats")
+                    
+                    if let validPokemon2 = selectedPokemon2, let validBattleData2 = battleData2 {
+                        let stats2 = calculator.battleStats(pokemon: validPokemon2, pokemonData: validBattleData2)
+                        BattleDataGridView(stats: stats2)
                     }
                 }
             }
-            .padding()
-            Button {
-                let tempTeam = team1
-                team1 = team2
-                team2 = tempTeam
-                let tempPokemon = pokemon1
-                pokemon1 = pokemon2
-                pokemon2 = tempPokemon
-            } label: {
-                Text("Swap")
-            }
+            
             Grid() {
                 GridRow {
                     moveButton(index: 0)
@@ -131,6 +117,12 @@ struct CalculationView: View {
                 }
             }
             .padding()
+            
+            Button {
+                teamSwap()
+            } label: {
+                Text("Swap")
+            }
         }
         .task {
             await pokemonNames.loadNames()
@@ -160,6 +152,15 @@ struct CalculationView: View {
             team2 = database.teams.first
         }
     }
+    
+    func teamSwap() {
+        let tempTeam = team1
+        team1 = team2
+        team2 = tempTeam
+        let tempPokemon = pokemon1
+        pokemon1 = pokemon2
+        pokemon2 = tempPokemon
+    }
 
     func teamPicker(teamBinding: Binding<Team?>, firstTeam: Bool) -> some View {
         VStack {
@@ -174,12 +175,16 @@ struct CalculationView: View {
                 PokemonImageView(pokemonNumber: 0)
                     .frame(width: 200, height: 200)
             }
-            Picker(selection: teamBinding, label: EmptyView()) {
-                ForEach(database.teams.filter { !$0.pokemonIDs.isEmpty }) { team in
-                    HStack {
-                        Text(team.name)
+            
+            HStack {
+                Text("Select Team:")
+                Picker(selection: teamBinding, label: EmptyView()) {
+                    ForEach(database.teams.filter { !$0.pokemonIDs.isEmpty }) { team in
+                        HStack {
+                            Text(team.name)
+                        }
+                        .tag(team)
                     }
-                    .tag(team)
                 }
             }
         }
@@ -199,12 +204,12 @@ struct CalculationView: View {
                 .padding()
                 .font(.headline)
                 .frame(width: 175)
-                .background(selectedMove == index ? .black : .white)
-                .foregroundStyle(selectedMove == index ? .white : .black)
+                .background(selectedMove == index ? Color.accentColor : .white)
+                .foregroundStyle(selectedMove == index ? .white : Color.accentColor)
                 .cornerRadius(12)
                 .overlay(
                     selectedMove == index ? AnyView(EmptyView()) : AnyView(RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black, lineWidth: 1))
+                        .stroke(Color.accentColor, lineWidth: 1))
                 )
             } else {
                 Text("No Move")
@@ -213,7 +218,7 @@ struct CalculationView: View {
                     .frame(width: 175)
                     .cornerRadius(12)
                     .overlay(AnyView(RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black, lineWidth: 1)))
+                        .stroke(Color.accentColor, lineWidth: 1)))
             }
         } else {
             Text("Select a Pokémon first!")

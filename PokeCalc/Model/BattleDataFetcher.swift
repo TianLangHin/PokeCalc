@@ -32,7 +32,6 @@ struct BattleDataFetcher: APIFetchable {
         let moves: [MoveData]
         let stats: [StatData]
         let types: [TypeData]
-        let weight: Int
 
         struct AbilityData: Codable {
             let ability: RawAbilityData
@@ -74,7 +73,6 @@ struct BattleDataFetcher: APIFetchable {
         let moves: [(String, URL)]
         let stats: PokemonStats
         let types: [(String, URL)]
-        let weight: Int
     }
 
     func convert(data: RawBattleData) -> BattleData {
@@ -87,7 +85,6 @@ struct BattleDataFetcher: APIFetchable {
             abilities: data.abilities.map { $0.ability.name },
             moves: data.moves.map { ($0.move.name, $0.move.url) },
             stats: baseStats,
-            types: data.types.map { ($0.type.name, $0.type.url) },
-            weight: data.weight)
+            types: data.types.map { ($0.type.name, $0.type.url) })
     }
 }
