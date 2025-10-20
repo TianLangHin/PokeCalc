@@ -207,8 +207,13 @@ struct CalculationView: View {
                         .stroke(Color.black, lineWidth: 1))
                 )
             } else {
-                Text("No move to select!")
-                    .border(selectedMove == index ? .black : .white)
+                Text("No Move")
+                    .padding()
+                    .font(.headline)
+                    .frame(width: 175)
+                    .cornerRadius(12)
+                    .overlay(AnyView(RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.black, lineWidth: 1)))
             }
         } else {
             Text("Select a Pokémon first!")
