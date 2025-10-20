@@ -228,7 +228,7 @@ struct CalculationView: View {
                 .frame(width: 175)
                 .cornerRadius(12)
                 .overlay(AnyView(RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.accentColor, lineWidth: 1)))
+                    .stroke(.black, lineWidth: 1)))
         }
     }
 
