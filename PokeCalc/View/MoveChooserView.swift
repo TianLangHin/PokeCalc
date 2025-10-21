@@ -9,15 +9,21 @@ import Foundation
 import SwiftUI
 
 struct MoveChooserView: View {
-    var pokeID: Int
-    var moveListName: [String]
-    @Binding var move: String
-    var currentMoveNum: Int
     @EnvironmentObject var database: DatabaseViewModel
-    
+
+    @Binding var move: String
+
+    var pokemonID: Int
+    var moveListName: [String]
+    var currentMoveNum: Int
+
     var body: some View {
         NavigationLink {
-            MoveLookupView(pokeID: pokeID, moveListName: moveListName, currentMove: $move, currentMoveNum: currentMoveNum)
+            MoveLookupView(
+                pokemonID: pokemonID,
+                moveListName: moveListName,
+                currentMove: $move,
+                currentMoveNum: currentMoveNum)
                 .environmentObject(database)
         } label: {
             HStack(spacing: 10) {

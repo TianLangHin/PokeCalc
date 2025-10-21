@@ -12,21 +12,20 @@ struct MoveLookupView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: DatabaseViewModel
 
-    @State var pokeID: Int
+    @State var pokemonID: Int
     @State var isLoaded = false
     @State var queryString: String = ""
     @State var moveListName: [String]
     @Binding var currentMove: String
     @State var currentMoveNum: Int
-    
+
     var pokemon: Pokemon? {
-        database.pokemon.first(where: { $0.id == pokeID })
+        database.pokemon.first(where: { $0.id == pokemonID })
     }
-    
+
     var filteredMoves: [String] {
         return queryString == "" ? moveListName : self.filter(moveListName, on: queryString)
     }
-    
 
     var body: some View {
         VStack {
@@ -45,7 +44,7 @@ struct MoveLookupView: View {
                                     pokemon.moves.append(move)
                                 }
                                 dismiss()
-                            } else if (pokeID == 0) {
+                            } else if pokemonID == 0 {
                                 currentMove = move
                                 dismiss()
                             }
@@ -68,9 +67,7 @@ struct MoveLookupView: View {
             isLoaded = true
         }
     }
-    
-    
-    
+
     private func filter(_ data: [String], on query: String) -> [String] {
         return data.filter { item in
             item.lowercased().contains(query.lowercased().replacingOccurrences(of: " ", with: "-"))

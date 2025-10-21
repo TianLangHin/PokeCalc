@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+/// This View is a pop up that will allow the user to add a new Team.
 struct AddTeamView: View {
-    @EnvironmentObject var database: DatabaseViewModel
+    // This view may dismiss itself, and also needs access to the database to add the new Team.
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var database: DatabaseViewModel
 
+    // The user will enter a name that must be kept track of.
     @State var teamName = ""
+
+    // Additionally, some errors may pop up which will manifest as an alert controlled by these state variables.
     @State var errorText = ""
     @State var createError = false
 
@@ -29,6 +34,8 @@ struct AddTeamView: View {
                 .opacity(createError ? 1 : 0)
                 .foregroundStyle(Color.red)
 
+            // The user has the option to either "cancel" (i.e., dismiss the view)
+            // or to add the team which will also dismiss the view if an error doesn't occur.
             HStack(spacing: 10) {
                 Button {
                     dismiss()
@@ -43,7 +50,7 @@ struct AddTeamView: View {
                         dismiss()
                     }
                 } label: {
-                    Text("Submit")
+                    Text("Add Team!")
                 }
                 .padding()
                 .buttonStyle(.borderedProminent)
