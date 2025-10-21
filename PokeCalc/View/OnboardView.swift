@@ -9,19 +9,29 @@
 import Foundation
 import SwiftUI
 
+/// This view is displayed upon the app's first startup, and also in the last page of the main tab view.
+/// It provides a user guide for using the various features of the app.
 struct OnboardView: View {
+    // This view may need to programmatically dismiss itself, hence this is required.
     @Environment(\.dismiss) var dismiss
 
+    // This view also has different pages,
+    // and will display differently depending on whether it is shown in a sheet or not.
     @State var page: Int = 0
     @State var isSheet: Bool = false
 
+    // The selected tab is used as a way to automatically jump back to the first page of the app when dismissed.
     @Binding var selectedTab: Int
 
     var body: some View {
+        // The content of this view is a TabView of its own, but without a visible bar.
         TabView(selection: $page) {
+            // There are three pages to this guide,
+            // and each have different content being represented by different `index` values.
             ForEach(0..<3) { index in
                 VStack {
                     if index == 0 {
+                        // First page.
                         Spacer()
                         Text("Hi Trainer! Welcome to PokeCalc.")
                             .font(.title3)
@@ -41,6 +51,7 @@ struct OnboardView: View {
                             .padding()
                         Text("Now you are equipped with a team 👍, let's start putting in some Pokémon!")
                     } else if index == 1 {
+                        // Second page.
                         Spacer()
                         ScrollView {
                             Text("User Guide (Cont.)")
@@ -72,6 +83,7 @@ struct OnboardView: View {
                                 .padding()
                         }
                     } else if index == 2 {
+                        // Third page.
                         Spacer()
                         ScrollView {
                             Text("User Guide (Cont.)")
@@ -102,6 +114,8 @@ struct OnboardView: View {
                     }
 
                     Spacer()
+                    // Below the custom content of each page,
+                    // a button is provided to either advance the page or move back to the main app.
                     Button {
                         if page < 2 {
                             page += 1

@@ -37,7 +37,7 @@ struct AddPokemonView: View {
 
     @State var stats: [Int] = Array(repeating: 0, count: 6)
     @State var abilityList: [String] = []
-    @State var moveListName: [String] = []
+    @State var moveList: [String] = []
     @State var pokemonType: [String] = []
 
     let statNames: [String] = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]
@@ -48,7 +48,7 @@ struct AddPokemonView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // The main customisation interface does not fit on the screen, so it is scrollable.
+                // The main customisation interface does not fit on the screen entirely, so it is scrollable.
                 ScrollView {
                     VStack {
                         // At the top, the Pokemon's image is displayed with its typing below it
@@ -80,7 +80,6 @@ struct AddPokemonView: View {
                         // The user can then choose the Pokemon's item.
                         NavigationLink {
                             ItemLookupView(selectedItem: $item)
-                                .environmentObject(database)
                         } label: {
                             HStack(spacing: 10) {
                                 ItemImageView(item: item)
@@ -91,7 +90,7 @@ struct AddPokemonView: View {
 
                         // The user can also customise the Pokemon level.
                         VStack {
-                            Text("Level:")
+                            Text("Level")
                                 .font(.title3)
                                 .bold()
                             TextField("Enter the Pokemon Level", value: $level, format: .number)
@@ -114,16 +113,16 @@ struct AddPokemonView: View {
 
                         // The four-move moveset can also be customised using a custom View.
                         VStack {
-                            Text("Move List:")
+                            Text("Move List")
                                 .font(.title3)
                                 .bold()
-                            MoveChooserView(move: $move1, pokemonID: 0, moveListName: moveListName, currentMoveNum: 1)
+                            MoveChooserView(move: $move1, pokemonID: 0, moveList: moveList, currentMoveNum: 1)
                                 .environmentObject(database)
-                            MoveChooserView(move: $move2, pokemonID: 0, moveListName: moveListName, currentMoveNum: 2)
+                            MoveChooserView(move: $move2, pokemonID: 0, moveList: moveList, currentMoveNum: 2)
                                 .environmentObject(database)
-                            MoveChooserView(move: $move3, pokemonID: 0, moveListName: moveListName, currentMoveNum: 3)
+                            MoveChooserView(move: $move3, pokemonID: 0, moveList: moveList, currentMoveNum: 3)
                                 .environmentObject(database)
-                            MoveChooserView(move: $move4, pokemonID: 0, moveListName: moveListName, currentMoveNum: 4)
+                            MoveChooserView(move: $move4, pokemonID: 0, moveList: moveList, currentMoveNum: 4)
                                 .environmentObject(database)
                         }
                         .padding()
@@ -226,7 +225,7 @@ struct AddPokemonView: View {
             if ability == "" {
                 self.ability = data.abilities.first!
             }
-            self.moveListName = data.moves.map { $0.0 }.sorted()
+            self.moveList = data.moves.map { $0.0 }.sorted()
             self.pokemonType = data.types.map { $0.0 }
             
             self.abilityList = data.abilities
