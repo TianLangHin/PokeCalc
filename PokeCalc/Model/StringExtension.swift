@@ -14,10 +14,12 @@ extension String {
     // Converts strings from the PokéAPI format into a human-readable format.
     func readableFormat() -> String {
         // This converts lowercase Kebab-case into capitalised space-separated words.
-        self
-            .split(separator: "-")
-            .map { $0.capitalized }
-            .joined(separator: " ")
+        let baseString = self.split(separator: "-").map { $0.capitalized }.joined(separator: " ")
+        if baseString.hasSuffix(" Mask") {
+            let index = baseString.index(baseString.endIndex, offsetBy: -5)
+            return String(baseString[..<index])
+        }
+        return baseString
     }
 
     // Converts strings representing Pokémon from either

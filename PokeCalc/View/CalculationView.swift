@@ -116,7 +116,8 @@ struct CalculationView: View {
                     if let validPokemon1 = selectedPokemon1 {
                         let name = pokemonNames.getName(apiId: validPokemon1.pokemonNumber)
                         Text(name.readableFormat())
-                            .font(.subheadline)
+                            .font(.footnote)
+                            .padding(1)
                     } else {
                         Text("No Pokémon selected")
                     }
@@ -124,7 +125,8 @@ struct CalculationView: View {
                     if let validPokemon2 = selectedPokemon2 {
                         let name = pokemonNames.getName(apiId: validPokemon2.pokemonNumber)
                         Text(name.readableFormat())
-                            .font(.subheadline)
+                            .font(.footnote)
+                            .padding(1)
                     } else {
                         Text("No Pokémon selected")
                     }
