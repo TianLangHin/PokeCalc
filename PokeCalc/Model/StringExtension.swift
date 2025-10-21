@@ -28,7 +28,7 @@ extension String {
             .lowercased()
             .trimmingCharacters(in: .whitespaces)
             .replacingOccurrences(of: " ", with: "-")
-            .replacingOccurrences(of: ":", with: "-")
+            .replacingOccurrences(of: ":", with: "")
 
         // However, some specific Pokémon have extra logic required for this conversion
         // due to the convention of PokéAPI.
@@ -40,6 +40,8 @@ extension String {
             return "indeedee-female"
         } else if baseString.hasPrefix("arceus") {
             return "arceus"
+        } else if baseString.hasPrefix("silvally") {
+            return "silvally"
         } else if baseString.hasPrefix("necrozma-dusk-mane") {
             return "necrozma-dusk"
         } else if baseString.hasPrefix("necrozma-dawn-mane") {
