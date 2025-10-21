@@ -66,7 +66,7 @@ struct PokeCalcWidgetEntryView : View {
     var body: some View {
         VStack {
             let pokemonData = db.selectAllPokemon() ?? []
-            if let team = db.displayTeam() {
+            if let team = displayTeam() {
                 VStack(alignment: .center) {
                     Text(team.name)
                         .fontWeight(.bold)
@@ -105,6 +105,17 @@ struct PokeCalcWidgetEntryView : View {
         } else {
             SynchronousImage(number: 0)
         }
+    }
+
+    func displayTeam() -> Team? {
+        let allTeams = db.selectAllTeams()?.sorted(by: { team1, team2 in
+            if team1.isFavourite == team2.isFavourite {
+                return team1.id < team2.id
+            } else {
+                return team1.isFavourite
+            }
+        })
+        return allTeams?.first
     }
 }
 
