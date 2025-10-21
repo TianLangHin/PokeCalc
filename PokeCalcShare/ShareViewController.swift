@@ -9,6 +9,9 @@ import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
 
+/// The structure of this `ShareViewController` is heavily inspired by and based off
+/// the tutorial given by this article:
+/// https://medium.com/@henribredtprivat/create-an-ios-share-extension-with-custom-ui-in-swift-and-swiftui-2023-6cf069dc1209
 class ShareViewController: UIViewController {
     /// Main functionality that loads a given View the moment the Share extension starts.
     override func viewDidLoad() {
@@ -37,13 +40,13 @@ class ShareViewController: UIViewController {
                 self.close()
                 return
             }
-            
+
             // Try decoding the attached data as a String. If unsuccessful, close the share extension.
             guard let text = providedText as? String else {
                 self.close()
                 return
             }
-            
+
             // If all the above checks worked, then the View is to be displayed.
             DispatchQueue.main.async {
                 // This will host the SwiftUI View
@@ -66,7 +69,7 @@ class ShareViewController: UIViewController {
             }
         }
     }
-    
+
     /// Close the Share Extension.
     func close() {
         self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
