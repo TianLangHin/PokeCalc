@@ -221,9 +221,10 @@ struct AddPokemonView: View {
         let fetcher = BattleDataFetcher()
         self.data = await fetcher.fetch(self.pokemonNumber)
         if let data = self.data {
-            // All Pokemon have at the very least one ability, so forcefully unwrapping like this will not cause any problems.
+            // While most Pokémon have an ability, some recently released ones may not
+            // (e.g., new Mega Evolutions in Pokémon Legends: Z-A). Hence, a default "" string is provided.
             if ability == "" {
-                self.ability = data.abilities.first!
+                self.ability = data.abilities.first ?? ""
             }
             self.moveList = data.moves.map { $0.0 }.sorted()
             self.pokemonType = data.types.map { $0.0 }
