@@ -28,6 +28,7 @@ extension String {
             .lowercased()
             .trimmingCharacters(in: .whitespaces)
             .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: ":", with: "-")
 
         // However, some specific Pokémon have extra logic required for this conversion
         // due to the convention of PokéAPI.
@@ -43,6 +44,8 @@ extension String {
             return "necrozma-dusk"
         } else if baseString.hasPrefix("necrozma-dawn-mane") {
             return "necrozma-dawn"
+        } else if baseString.hasPrefix("basculegion") {
+            return "basculegion-male"
         } else {
             return baseString
         }
