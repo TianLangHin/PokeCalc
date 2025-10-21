@@ -87,6 +87,7 @@ struct PokemonLookupView: View {
                     }
                     .searchable(
                         text: $namesLookup.queryString,
+                        placement: .navigationBarDrawer(displayMode: .always),
                         prompt: team == nil ? "Look for an existing Pokémon setup..." : "Look for a Pokémon...")
                     // The list is also searchable using the native `searchable` modifier for a more consistent UI.
                 } else {
