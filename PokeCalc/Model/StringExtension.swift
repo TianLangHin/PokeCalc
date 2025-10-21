@@ -6,19 +6,31 @@
 //
 
 import Foundation
+
+/// These String extensions allow easy conversion between different string formats throughout the app.
+/// This is due to the difference between PokéPaste/Showdown formats (imports via Share Extension),
+/// PokéAPI conventions, and typical human-readable formats.
 extension String {
+    // Converts strings from the PokéAPI format into a human-readable format.
     func readableFormat() -> String {
+        // This converts lowercase Kebab-case into capitalised space-separated words.
         self
             .split(separator: "-")
             .map { $0.capitalized }
             .joined(separator: " ")
     }
 
+    // Converts strings representing Pokémon from either
+    // a human-readable format or PokéPaste format into the PokéAPI format.
     func apiPokemonFormat() -> String {
+        // Generally, this conversion involves converting capitalised space-separated words into Kebab-case.
         let baseString = self
             .lowercased()
             .trimmingCharacters(in: .whitespaces)
             .replacingOccurrences(of: " ", with: "-")
+
+        // However, some specific Pokémon have extra logic required for this conversion
+        // due to the convention of PokéAPI.
         if baseString.hasPrefix("ogerpon-") {
             return baseString + "-mask"
         } else if baseString.hasPrefix("indeedee-m") {
@@ -36,7 +48,10 @@ extension String {
         }
     }
 
+    // Converts all strings except those representing Pokémon from a human-readable format
+    // into the PokéAPI format. This is used for items, abilities and moves.
     func apiGenericFormat() -> String {
+        // Similar conversion to Kebab-case, with the added logic of removing apostrophes and brackets.
         self
             .lowercased()
             .replacingOccurrences(of: " ", with: "-")

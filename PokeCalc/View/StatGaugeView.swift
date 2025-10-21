@@ -21,18 +21,18 @@ struct StatGaugeView: View {
             .textFieldStyle(.roundedBorder)
             .keyboardType(.numberPad)
             .onChange(of: value) {
-                value = min(max(value, 0), 252)
+                value = Pokemon.clipEV(value: value)
             }
         
         VStack(spacing: 10) {
             Button {
-                value = min(max(value+4, 0), 252)
+                value = Pokemon.clipEV(value: value + 4)
             } label: {
                 Image(systemName: "chevron.up")
             }
             
             Button {
-                value = min(max(value-4, 0), 252)
+                value = Pokemon.clipEV(value: value - 4)
             } label: {
                 Image(systemName: "chevron.down")
             }

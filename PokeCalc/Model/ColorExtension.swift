@@ -5,13 +5,13 @@
 //  Created by Dương Anh Trần on 16/10/2025.
 //
 
-
-import Foundation
 import SwiftUI
 
+/// These Colour extensions provide custom convenience functions for particular
+/// colour shades specific to the Pokémon theme to be used throughout the app.
 extension Color {
-    static let primary: Color = .init(hex: 0x3b3b3b)
-    
+    // Custom convenience constructor for creating a colour
+    // from an integer, which can be written as a hex code.
     init(hex: Int) {
         self.init(
             .sRGB,
@@ -22,6 +22,8 @@ extension Color {
         )
     }
 
+    // Colours that correspond to each of the Pokémon types,
+    // used by the pokepaste.es website.
     static func getBackgroundColour(type: String) -> Color {
         switch type {
         case "normal":
@@ -64,7 +66,7 @@ extension Color {
             return Color.clear
         }
     }
-    
+
     // Colours for the foreground text when put against the above background color,
     // designed to maximise contrast with the background colour.
     static func getForegroundColour(type: String) -> Color {
@@ -114,12 +116,18 @@ extension Color {
     // which assigns each stat its own colour for visual distinction.
     static func getStatColour(stat: String) -> Color {
         switch stat {
-        case "HP": return Color(hex: 0xFF0000)
-        case "Atk": return Color(hex: 0xF08030)
-        case "Def": return Color(hex: 0xF8D030)
-        case "SpA": return Color(hex: 0x6890F0)
-        case "SpD": return Color(hex: 0x78C850)
-        case "Spe": return Color(hex: 0xF85888)
+        case "HP":
+            return Color(hex: 0xFF0000)
+        case "Atk":
+            return Color(hex: 0xF08030)
+        case "Def":
+            return Color(hex: 0xF8D030)
+        case "SpA":
+            return Color(hex: 0x6890F0)
+        case "SpD":
+            return Color(hex: 0x78C850)
+        case "Spe":
+            return Color(hex: 0xF85888)
         default: return Color.gray
         }
     }
