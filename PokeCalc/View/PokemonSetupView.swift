@@ -23,22 +23,22 @@ struct PokemonSetupView: View {
     var body: some View {
         List {
             ForEach(database.pokemon.filter { $0.pokemonNumber == pokemonNumber }, id: \.self) { pokemon in
-                // This forced unwrapping works here since the app's workflow ensures a Pokemon set
-                // must always exist within a team.
-                let team = database.teams.filter { $0.pokemonIDs.contains(pokemon.id) }.first!
-                NavigationLink {
-                    // Tapping on a result allows the user to edit an existing set.
-                    PokemonEditView(pokemon: pokemon, pokemonSpecies: pokemonName)
-                        .environmentObject(database)
-                        .presentationDragIndicator(.visible)
-                } label: {
-                    // The result shows both the image of the Pokemon as well as its name and team name.
-                    HStack {
-                        PokemonImageView(pokemonNumber: pokemonNumber)
-                        VStack {
-                            Text(pokemonName.readableFormat())
-                            Text("Team: \(team.name)")
-                                .font(.subheadline)
+                // For extra safety, if a Pokémon somehow is not referenced by a team, we ignore it.
+                if let team = database.teams.filter({ $0.pokemonIDs.contains(pokemon.id) }).first {
+                    NavigationLink {
+                        // Tapping on a result allows the user to edit an existing set.
+                        PokemonEditView(pokemon: pokemon, pokemonSpecies: pokemonName)
+                            .environmentObject(database)
+                            .presentationDragIndicator(.visible)
+                    } label: {
+                        // The result shows both the image of the Pokemon as well as its name and team name.
+                        HStack {
+                            PokemonImageView(pokemonNumber: pokemonNumber)
+                            VStack {
+                                Text(pokemonName.readableFormat())
+                                Text("Team: \(team.name)")
+                                    .font(.subheadline)
+                            }
                         }
                     }
                 }
